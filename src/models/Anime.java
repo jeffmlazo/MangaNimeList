@@ -13,6 +13,7 @@ public class Anime {
 
     private StringProperty title;
     private IntegerProperty episode;
+    private IntegerProperty totalEpisode;
 
     public void setTitle(String title) {
         titleProperty().set(title);
@@ -30,11 +31,11 @@ public class Anime {
         return title;
     }
 
-    public void setEpisode(Integer episode) {
+    public void setEpisode(int episode) {
         episodeProperty().set(episode);
     }
 
-    public Integer getEpisode() {
+    public int getEpisode() {
         return episodeProperty().get();
     }
 
@@ -44,6 +45,10 @@ public class Anime {
         }
 
         return episode;
+    }
+
+    public void setTotalEpisode(int totalEpisode) {
+        episodeProperty().set(totalEpisode);
     }
 
 }

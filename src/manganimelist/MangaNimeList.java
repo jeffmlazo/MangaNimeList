@@ -1,5 +1,8 @@
 package manganimelist;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -11,7 +14,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -30,10 +32,8 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -47,11 +47,19 @@ import models.Anime;
  */
 public class MangaNimeList extends Application {
 
+    private final ObservableList<Anime> animeData = FXCollections.observableArrayList();
+
     @Override
     public void start(Stage primaryStage) {
-        Anime anime = new Anime();
-        anime.setTitle("The Quick brown Pax");
-        anime.setEpisode(50);
+
+        // Dummy values for anime data
+        for (int i = 0; i < 100; i++) {
+            Anime anime = new Anime();
+            anime.setTitle("Anime" + i);
+            anime.setEpisode(i);
+
+            animeData.add(anime);
+        }
 
         // Create FlowPane and set its properties
         FlowPane pane = new FlowPane();
@@ -160,14 +168,14 @@ public class MangaNimeList extends Application {
 
     private HBox getHBoxBody() {
         TableView<Anime> table = new TableView<>();
-//        ObservableList<Anime> teamMembers = ;
-//        table.setItems(teamMembers);
+        ObservableList<Anime> teamMembers = animeData;
+        table.setItems(teamMembers);
 
         TableColumn<Anime, String> titleCol = new TableColumn<>("Title");
         titleCol.setCellValueFactory(new PropertyValueFactory("title"));
 
         TableColumn<Anime, Integer> episodeCol = new TableColumn<>("Episode");
-        titleCol.setCellValueFactory(new PropertyValueFactory("episode"));
+        episodeCol.setCellValueFactory(new PropertyValueFactory("episode"));
 
         table.getColumns().setAll(titleCol, episodeCol);
         /* Tabs*/
@@ -176,7 +184,6 @@ public class MangaNimeList extends Application {
         Tab animeTab = new Tab();
         animeTab.setText("Anime");
         animeTab.setContent(table);
-//        animeTab.setContent(new Rectangle(760, 500, Color.DARKGRAY));
 
         // Create mangaTab and set its properties
         Tab mangaTab = new Tab();
@@ -211,7 +218,9 @@ public class MangaNimeList extends Application {
         btnOk.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                System.out.println("Hello World!");
+                LocalDateTime ldt = LocalDateTime.now();
+                DateTimeFormatter dtFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                System.out.println("Time is: " + dtFormat.format(ldt));
             }
         });
 
