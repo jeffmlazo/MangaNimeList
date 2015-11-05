@@ -1,10 +1,10 @@
 package manganimelist;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -51,7 +51,8 @@ public class MangaNimeList extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
+        ReadOnlyDoubleProperty primaryWidth = primaryStage.widthProperty();
+        
         // Dummy values for anime data
         for (int i = 0; i < 100; i++) {
             Anime anime = new Anime();
@@ -64,10 +65,10 @@ public class MangaNimeList extends Application {
         // Create FlowPane and set its properties
         FlowPane pane = new FlowPane();
         pane.getChildren().addAll(
-                getHboxHeader1(),
-                getHBoxHeader2(),
-                getHBoxBody(),
-                getHBoxFooter()
+                getHboxRow1(primaryWidth),
+                getHBoxRow2(primaryWidth),
+                getHBoxRow3(),
+                getHBoxRow4()
         );
 
         // The scene properties that dictates the window size
@@ -75,7 +76,7 @@ public class MangaNimeList extends Application {
 
         // Set propeties for primaryStage
         primaryStage.setTitle("MangaNimeList");
-        primaryStage.setResizable(false);
+//        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -87,7 +88,7 @@ public class MangaNimeList extends Application {
         launch(args);
     }
 
-    private HBox getHboxHeader1() {
+    private HBox getHboxRow1(ReadOnlyDoubleProperty primaryWidth) {
 
         // Constant variables for menus
         final Menu menuFile = new Menu("File");
@@ -140,19 +141,19 @@ public class MangaNimeList extends Application {
         cboListType.setValue("Anime"); // Set the default value
 
         // Create a HBox and set its properties
-        HBox hBox = new HBox();
-        hBox.setHgrow(mainMenuBar, Priority.ALWAYS);
-        hBox.setPrefWidth(810);
-        hBox.getChildren().addAll(
+        HBox row1 = new HBox();
+        HBox.setHgrow(mainMenuBar, Priority.ALWAYS);
+        row1.prefWidthProperty().bind(primaryWidth.subtract(15));
+        row1.getChildren().addAll(
                 mainMenuBar,
                 tfSearch,
                 cboListType
         );
 
-        return hBox;
+        return row1;
     }
 
-    private HBox getHBoxHeader2() {
+    private HBox getHBoxRow2(ReadOnlyDoubleProperty primaryWidth) {
         /* Toolbars */
         ToolBar toolbars = new ToolBar(
                 new Button("View"),
@@ -161,19 +162,19 @@ public class MangaNimeList extends Application {
         );
 
         // Create a HBox and set its properties
-        HBox hBox = new HBox();
+        HBox row2 = new HBox();
         // Set the padding top, right, bottom, left
-        hBox.setPadding(new Insets(0, 0, 10, 0));
-        hBox.setHgrow(toolbars, Priority.ALWAYS);
-        hBox.setPrefWidth(810);
-        hBox.getChildren().addAll(
+        row2.setPadding(new Insets(0, 0, 10, 0));
+        HBox.setHgrow(toolbars, Priority.ALWAYS);
+        row2.prefWidthProperty().bind(primaryWidth);
+        row2.getChildren().addAll(
                 toolbars
         );
 
-        return hBox;
+        return row2;
     }
 
-    private HBox getHBoxBody() {
+    private HBox getHBoxRow3() {
         TableView<Anime> table = new TableView<>();
         ObservableList<Anime> teamMembers = animeData;
         table.setItems(teamMembers);
@@ -209,15 +210,15 @@ public class MangaNimeList extends Application {
         ));
         mainTab.getTabs().addAll(animeTab, mangaTab);
 
-        HBox hBox = new HBox();
+        HBox row3 = new HBox();
         // Set the padding top, right, bottom, left
-        hBox.setPadding(new Insets(0, 0, 0, 20));
-        hBox.getChildren().addAll(mainTab);
+        row3.setPadding(new Insets(0, 0, 0, 20));
+        row3.getChildren().addAll(mainTab);
 
-        return hBox;
+        return row3;
     }
 
-    private HBox getHBoxFooter() {
+    private HBox getHBoxRow4() {
         /* Buttons */
         // Create button ok and set its properties
         Button btnOk = new Button();
@@ -241,16 +242,16 @@ public class MangaNimeList extends Application {
             }
         });
 
-        HBox hBox = new HBox(4);
+        HBox row4 = new HBox(4);
         // Set the padding top, right, bottom, left
-        hBox.setPadding(new Insets(20, 20, 20, 0));
-        hBox.setAlignment(Pos.BASELINE_RIGHT);
-        hBox.setPrefWidth(810);
-        hBox.getChildren().addAll(
+        row4.setPadding(new Insets(20, 20, 20, 0));
+        row4.setAlignment(Pos.BASELINE_RIGHT);
+        row4.setPrefWidth(810);
+        row4.getChildren().addAll(
                 btnOk,
                 btnClose
         );
 
-        return hBox;
+        return row4;
     }
 }
