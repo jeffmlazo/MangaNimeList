@@ -80,6 +80,13 @@ public class MangaNimeList extends Application {
         primaryStage.show();
     }
 
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     private HBox getHboxHeader1() {
 
         // Constant variables for menus
