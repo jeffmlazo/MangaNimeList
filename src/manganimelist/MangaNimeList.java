@@ -52,7 +52,7 @@ public class MangaNimeList extends Application {
     @Override
     public void start(Stage primaryStage) {
         ReadOnlyDoubleProperty primaryWidth = primaryStage.widthProperty();
-        
+
         // Dummy values for anime data
         for (int i = 0; i < 100; i++) {
             Anime anime = new Anime();
@@ -67,7 +67,7 @@ public class MangaNimeList extends Application {
         pane.getChildren().addAll(
                 getHboxRow1(primaryWidth),
                 getHBoxRow2(primaryWidth),
-                getHBoxRow3(),
+                getHBoxRow3(primaryWidth),
                 getHBoxRow4()
         );
 
@@ -124,12 +124,15 @@ public class MangaNimeList extends Application {
 
         /* Text Fields */
         // Create search text field and set its properties
-        TextField tfSearch = new TextField("Enter Title");
+        TextField tfSearch = new TextField();
+        // Set a placeholder text
+        tfSearch.setPromptText("Enter Title");
         tfSearch.setId("tfSearch");
         tfSearch.setPrefColumnCount(15);
+        tfSearch.setFocusTraversable(false);
         tfSearch.setOnMouseClicked(e -> {
             if (e.getButton() == MouseButton.PRIMARY) {
-                tfSearch.clear();
+                System.out.println("Helo JavaFX");
             }
         });
 
@@ -174,7 +177,7 @@ public class MangaNimeList extends Application {
         return row2;
     }
 
-    private HBox getHBoxRow3() {
+    private HBox getHBoxRow3(ReadOnlyDoubleProperty primaryWidth) {
         TableView<Anime> table = new TableView<>();
         ObservableList<Anime> teamMembers = animeData;
         table.setItems(teamMembers);
@@ -212,7 +215,9 @@ public class MangaNimeList extends Application {
 
         HBox row3 = new HBox();
         // Set the padding top, right, bottom, left
-        row3.setPadding(new Insets(0, 0, 0, 20));
+        row3.setPadding(new Insets(0, 40, 0, 20));
+        HBox.setHgrow(mainTab, Priority.ALWAYS);
+        row3.prefWidthProperty().bind(primaryWidth);
         row3.getChildren().addAll(mainTab);
 
         return row3;
@@ -223,23 +228,17 @@ public class MangaNimeList extends Application {
         // Create button ok and set its properties
         Button btnOk = new Button();
         btnOk.setText("OK");
-        btnOk.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                LocalDateTime ldt = LocalDateTime.now();
-                DateTimeFormatter dtFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                System.out.println("Time is: " + dtFormat.format(ldt));
-            }
+        btnOk.setOnAction(e -> {
+            LocalDateTime ldt = LocalDateTime.now();
+            DateTimeFormatter dtFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            System.out.println("Time is: " + dtFormat.format(ldt));
         });
 
         // Create button close and set its properties
         Button btnClose = new Button();
         btnClose.setText("Close");
-        btnClose.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                Platform.exit();
-            }
+        btnClose.setOnAction(e -> {
+            Platform.exit();
         });
 
         HBox row4 = new HBox(4);
