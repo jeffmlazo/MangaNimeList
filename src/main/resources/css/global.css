@@ -1,0 +1,10 @@
+/* Remove blue focus color in a scroll pane control*/
+.scroll-pane{
+    -fx-background-color: transparent; 
+    /*-fx-control-inner-background: transparent;*/
+}
+
+.button{
+    /*-fx-focus-color: transparent;*/
+    /*-fx-faint-focus-color: transparent;*/
+}
