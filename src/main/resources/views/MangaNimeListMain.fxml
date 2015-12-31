@@ -61,7 +61,7 @@
             <children>
                 <ToolBar>
                     <items>
-                        <Button fx:id="tbBtnAdd" mnemonicParsing="false" onAction="#handleButtonAction" text="Add" />
+                        <Button fx:id="tbrBtnAdd" mnemonicParsing="false" onAction="#handleButtonAction" text="Add" />
                         <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="View" />
                         <Button layoutX="10.0" layoutY="13.0" mnemonicParsing="false" text="Update" />
                         <Button layoutX="56.0" layoutY="13.0" mnemonicParsing="false" text="Delete" />
@@ -109,18 +109,24 @@
                         </HBox>
                         <TabPane tabClosingPolicy="UNAVAILABLE" GridPane.columnSpan="2" GridPane.rowIndex="1">
                             <tabs>
-                                <Tab text="Anime">
+                                <Tab fx:id="tabAnime" text="Anime">
                                     <content>
-                                        <TableView fx:id="tblViewAnime" prefWidth="770.0">
+                                        <TableView fx:id="tblViewAnime">
                                             <columns>
-                                                <TableColumn fx:id="colAnimeTitle" prefWidth="75.0" text="Title" />
-                                                <TableColumn fx:id="colAnimeEpisode" prefWidth="75.0" text="Episode" />
-                                                <TableColumn fx:id="colAnimeTotalEpisode" prefWidth="75.0" text="Total Episode" />
-                                                <TableColumn fx:id="colAnimeGenre" prefWidth="75.0" text="Genre" />
-                                                <TableColumn fx:id="colAnimeAllWatched" prefWidth="75.0" text="All Watched" />
-                                                <TableColumn fx:id="colAnimeReleaseDate" text="Release Date" />
-                                                <TableColumn fx:id="colAnimeEndDate" prefWidth="70.0" text="End Date" />
-                                                <TableColumn fx:id="colAnimeCreatedOn" prefWidth="75.0" text="Created On" />
+                                                <TableColumn fx:id="colAniId" minWidth="100.0" prefWidth="100.0" text="Id" visible="false" />
+                                                <TableColumn fx:id="colAniTitle" minWidth="100.0" prefWidth="100.0" text="Title" />
+                                                <TableColumn fx:id="colAniEpisodes" prefWidth="75.0" text="Episodes">
+                                                    <columns>
+                                                        <TableColumn fx:id="colAniEpiStart" maxWidth="70.0" minWidth="70.0" prefWidth="70.0" text="Start" />
+                                                        <TableColumn fx:id="colAniEpiEnd" maxWidth="70.0" minWidth="70.0" prefWidth="70.0" text="End" />
+                                                        <TableColumn fx:id="colAniEpiTotal" maxWidth="80.0" minWidth="80.0" text="Total" />
+                                                    </columns>
+                                                </TableColumn>
+                                                <TableColumn fx:id="colAniAllWatched" prefWidth="75.0" text="All Watched" />
+                                                <TableColumn fx:id="colAniReleaseDate" text="Release Date" />
+                                                <TableColumn fx:id="colAniEndDate" prefWidth="70.0" text="End Date" />
+                                                <TableColumn fx:id="colAniState" prefWidth="75.0" text="State" />
+                                                <TableColumn fx:id="colAniCreatedOn" prefWidth="75.0" text="Created On" />
                                             </columns>
                                             <columnResizePolicy>
                                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -128,18 +134,25 @@
                                         </TableView>
                                     </content>
                                 </Tab>
-                                <Tab text="Manga">
+                                <Tab fx:id="tabManga" text="Manga">
                                     <content>
                                         <TableView fx:id="tblViewManga" prefHeight="573.0" prefWidth="800.0">
                                             <columns>
-                                                <TableColumn fx:id="colMangaTitle" prefWidth="75.0" text="Title" />
-                                                <TableColumn prefWidth="75.0" text="Genre" />
-                                                <TableColumn prefWidth="75.0" text="All Read" />
-                                                <TableColumn prefWidth="75.0" text="Chapters" />
-                                                <TableColumn prefWidth="75.0" text="Volume" />
-                                                <TableColumn text="Publish Date" />
-                                                <TableColumn prefWidth="70.0" text="End Date" />
-                                                <TableColumn prefWidth="75.0" text="Created On" />
+                                                <TableColumn fx:id="colMangaId" minWidth="100.0" prefWidth="100.0" text="Id" visible="false" />
+                                                <TableColumn fx:id="colMangaTitle" minWidth="100.0" prefWidth="100.0" text="Title" />
+                                                <TableColumn fx:id="colMangChapters" prefWidth="75.0" text="Chapters">
+                                                    <columns>
+                                                        <TableColumn fx:id="colMangaChapStart" maxWidth="70.0" minWidth="70.0" prefWidth="70.0" text="Start" />
+                                                        <TableColumn fx:id="colMangaChapEnd" maxWidth="70.0" minWidth="70.0" prefWidth="70.0" text="End" />
+                                                        <TableColumn fx:id="colMangaChapTotal" maxWidth="80.0" minWidth="80.0" text="Total" />
+                                                    </columns>
+                                                </TableColumn>
+                                                <TableColumn fx:id="colMangaVolumes" prefWidth="75.0" text="Volumes" />
+                                                <TableColumn fx:id="colMangaAllRead" prefWidth="75.0" text="All Read" />
+                                                <TableColumn fx:id="colMangaPublishDate" text="Publish Date" />
+                                                <TableColumn fx:id="colMangaEndDate" prefWidth="70.0" text="End Date" />
+                                                <TableColumn fx:id="colMangaState" prefWidth="70.0" text="State" />
+                                                <TableColumn fx:id="colMangaCreatedOn" prefWidth="75.0" text="Created On" />
                                             </columns>
                                             <columnResizePolicy>
                                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -151,13 +164,13 @@
                         </TabPane>
                         <HBox alignment="CENTER_LEFT" GridPane.rowIndex="2">
                             <children>
-                                <Label alignment="TOP_LEFT" text="Showing 99 of 100 entries" />
+                                <Label fx:id="lblAniTblEntries" alignment="TOP_LEFT" text="Showing 99 of 100 entries" />
                             </children>
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                             <children>
-                                <Button mnemonicParsing="false" prefWidth="70.0" text="Previous" />
-                                <Button mnemonicParsing="false" prefWidth="70.0" text="Next" />
+                                <Button mnemonicParsing="false" prefWidth="100.0" text="Previous" />
+                                <Button mnemonicParsing="false" prefWidth="100.0" text="Next" />
                             </children>
                         </HBox>
                     </children>
