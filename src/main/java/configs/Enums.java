@@ -21,8 +21,8 @@ public class Enums {
     }
 
     public enum MangaNimeIsWatchedRead {
-        yes("1"),
-        no("0");
+        yes("yes"),
+        no("no");
         private String isWatchedRead;
 
         private MangaNimeIsWatchedRead(String isWatchedRead) {

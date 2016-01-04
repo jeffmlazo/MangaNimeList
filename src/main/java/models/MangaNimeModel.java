@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -438,6 +439,43 @@ public class MangaNimeModel {
         }
     }
 
+    public boolean insertMangaNime() throws SQLException {
+        String query = "INSERT into manganime (manganime_id, list_type, title, epi_chap_start, epi_chap_end, total_epi_chap, all_watched_read, start_date, end_date, state, summary, volumes)"
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        // preparedStmt is already autocloseable so no need to add in the finally block
+        try (PreparedStatement preparedStmt = conn.prepareStatement(query);) {
+            preparedStmt.setString(1, getMangaNimeId());
+            preparedStmt.setString(2, getListType());
+            preparedStmt.setString(3, getTitle());
+            preparedStmt.setInt(4, getEpiChapStart());
+            preparedStmt.setInt(5, getEpiChapEnd());
+            preparedStmt.setInt(6, getTotalEpiChap());
+            preparedStmt.setString(7, getAllWatchedRead());
+            preparedStmt.setString(8, getStartDate());
+            preparedStmt.setString(9, getEndDate());
+            preparedStmt.setString(10, getState());
+            preparedStmt.setString(11, getSummary());
+            preparedStmt.setInt(12, getVolumes());
+
+            int affected = preparedStmt.executeUpdate();
+            if (affected == 1) {
+                //TODO: Need to figure out what to put here probably log method
+            } else {
+                System.err.println("No rows affected");
+                return false;
+            }
+
+        } catch (Exception e) {
+            System.err.println(e);
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+        }
+
+        return true;
+    }
+
     /**
      * Get all manganime details either manga or anime.
      *
@@ -448,7 +486,7 @@ public class MangaNimeModel {
     public ObservableList getAllMangaNime(String listType) throws SQLException {
 
         ObservableList data = FXCollections.observableArrayList();
-        String query = "SELECT * FROM manga_nime WHERE list_type = ?";
+        String query = "SELECT * FROM manganime WHERE list_type = ?";
         // preparedStmt is already autocloseable so no need to add in the finally block
         try (PreparedStatement preparedStmt = conn.prepareStatement(query, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);) {
             preparedStmt.setString(1, listType);
@@ -456,7 +494,7 @@ public class MangaNimeModel {
             // Iterate all result set
             while (rs.next()) {
                 MangaNimeModel mangaNimeData = new MangaNimeModel();
-                mangaNimeData.setMangaNimeId(rs.getString("manga_nime_id"));
+                mangaNimeData.setMangaNimeId(rs.getString("manganime_id"));
                 mangaNimeData.setTitle(rs.getString("title"));
                 mangaNimeData.setEpiChapStart(rs.getInt("epi_chap_start"));
                 mangaNimeData.setEpiChapEnd(rs.getInt("epi_chap_end"));

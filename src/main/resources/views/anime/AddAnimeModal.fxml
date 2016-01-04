@@ -106,20 +106,20 @@
                                         <Insets right="10.0" />
                                     </GridPane.margin>
                                 </Label>
-                                <ComboBox GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-                                <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                <ComboBox fx:id="cboAniState" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4" />
-                                <ComboBox fx:id="cboAniAllWatched" layoutX="210.0" layoutY="133.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="8" />
+                                <ComboBox fx:id="cboListType" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+                                <TextField fx:id="tfTitle" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                <ComboBox fx:id="cboState" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+                                <ComboBox fx:id="cboAllWatchedRead" layoutX="210.0" layoutY="133.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="8" />
                                 <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="5">
                                     <GridPane.margin>
                                         <Insets />
                                     </GridPane.margin>
                                     <children>
-                                        <TextField prefWidth="50.0" />
+                                        <TextField fx:id="tfTotalEpiChap" prefWidth="50.0" />
                                     </children>
                                 </HBox>
-                                <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                                <TextArea prefHeight="200.0" prefWidth="200.0" promptText="Short Description..." GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="10" GridPane.rowSpan="6">
+                                <DatePicker fx:id="dpStartDate" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                <TextArea fx:id="taSummary" prefHeight="200.0" prefWidth="200.0" promptText="Short Description..." GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="10" GridPane.rowSpan="6">
                                     <GridPane.margin>
                                         <Insets bottom="5.0" />
                                     </GridPane.margin>
@@ -127,7 +127,7 @@
                                 <Separator layoutX="10.0" layoutY="40.0" prefWidth="200.0" GridPane.columnSpan="8" GridPane.rowIndex="23" />
                                 <TitledPane collapsible="false" prefHeight="482.0" text="Genre" GridPane.columnIndex="4" GridPane.columnSpan="3" GridPane.rowIndex="8" GridPane.rowSpan="14">
                                     <content>
-                                        <GridPane fx:id="gridPAniGenre">
+                                        <GridPane fx:id="gridPaneGenre">
                                             <columnConstraints>
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -151,10 +151,10 @@
                                         </GridPane>
                                     </content>
                                 </TitledPane>
-                                <DatePicker layoutX="135.0" layoutY="193.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                                <DatePicker fx:id="dpEndDate" layoutX="135.0" layoutY="193.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                                 <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
                                     <children>
-                                        <TextField alignment="CENTER" prefHeight="25.0" prefWidth="50.0" promptText="Start" />
+                                        <TextField fx:id="tfEpiChapStart" alignment="CENTER" prefHeight="25.0" prefWidth="50.0" promptText="Start" />
                                         <Separator prefHeight="4.0" prefWidth="20.0">
                                             <opaqueInsets>
                                                 <Insets />
@@ -163,20 +163,20 @@
                                                 <Insets left="2.5" right="2.5" />
                                             </HBox.margin>
                                         </Separator>
-                                        <TextField alignment="CENTER" layoutX="10.0" layoutY="10.0" prefWidth="50.0" promptText="End" />
+                                        <TextField fx:id="tfEpiChapEnd" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefWidth="50.0" promptText="End" />
                                     </children>
                                 </HBox>
                                 <ListView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="16" GridPane.rowSpan="6" />
-                                <Button mnemonicParsing="false" prefWidth="60.0" text="Upload" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="22" />
+                                <Button fx:id="btnScreenSampUpload" mnemonicParsing="false" onAction="#handleButtonAction" prefWidth="60.0" text="Upload" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="22" />
                                 <HBox alignment="CENTER_RIGHT" spacing="5.0" GridPane.columnIndex="5" GridPane.columnSpan="2" GridPane.rowIndex="22">
                                     <children>
-                                        <Button mnemonicParsing="false" prefWidth="60.0" text="Add" />
-                                        <Button mnemonicParsing="false" prefWidth="60.0" text="Close" />
+                                        <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#handleButtonAction" prefWidth="60.0" text="Add" />
+                                        <Button fx:id="btnClose" mnemonicParsing="false" onAction="#handleButtonAction" prefWidth="60.0" text="Close" />
                                     </children>
                                 </HBox>
                                 <Pane GridPane.columnIndex="5" GridPane.rowIndex="4">
                                     <children>
-                                        <ImageView fitHeight="145.0" fitWidth="228.0" layoutX="-52.0" layoutY="-55.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fx:id="imgvProfPic" fitHeight="145.0" fitWidth="228.0" layoutX="-52.0" layoutY="-55.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="@../../images/Thumbnail(NoImage).png" />
                                             </image>
@@ -186,11 +186,11 @@
                                 <Label text="Thumbnail" GridPane.columnIndex="4" GridPane.halignment="LEFT" GridPane.rowIndex="7" />
                                 <Pane GridPane.columnIndex="5" GridPane.rowIndex="7">
                                     <children>
-                                        <TextField layoutX="-66.0" layoutY="3.0" prefHeight="25.0" prefWidth="257.0" />
+                                        <TextField fx:id="tfThumbnail" layoutX="-66.0" layoutY="3.0" prefHeight="25.0" prefWidth="257.0" />
                                     </children>
                                 </Pane>
-                                <Button mnemonicParsing="false" text="Upload" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
-                                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="16">
+                                <Button fx:id="btnThumbUpload" mnemonicParsing="false" onAction="#handleButtonAction" text="Upload" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
+                                <ImageView fx:id="imgvScreenshotsInfo" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="16">
                                     <image>
                                         <Image url="@../../images/info.png" />
                                     </image>
@@ -198,7 +198,7 @@
                                         <Insets />
                                     </GridPane.margin>
                                 </ImageView>
-                                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="9">
+                                <ImageView fx:id="imgvEpiInfo" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="9">
                                     <image>
                                         <Image url="@../../images/info.png" />
                                     </image>

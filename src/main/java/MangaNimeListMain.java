@@ -24,6 +24,7 @@ public class MangaNimeListMain extends Application {
 
         Parent root = FXMLLoader.load(getClass().getResource("/main/resources/views/MangaNimeListMain.fxml"));
         Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/main/resources/css/global.css").toExternalForm());
         stage.setScene(scene);
         stage.setTitle("MangaNimeList");
         stage.show();

@@ -169,8 +169,8 @@
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                             <children>
-                                <Button mnemonicParsing="false" prefWidth="100.0" text="Previous" />
-                                <Button mnemonicParsing="false" prefWidth="100.0" text="Next" />
+                                <Button mnemonicParsing="false" text="Previous" />
+                                <Button mnemonicParsing="false" text="Next" />
                             </children>
                         </HBox>
                     </children>
