@@ -10,7 +10,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import main.java.configs.DBUtil;
+import main.java.configs.DbUtil;
 
 /**
  *
@@ -97,7 +97,7 @@ public class GenreModel {
     ResultSet rs = null;
 
     public GenreModel() {
-        conn = DBUtil.Connector();
+        conn = DbUtil.connector();
         if (conn == null) {
             System.out.println("Database connection failed!");
             System.exit(1);

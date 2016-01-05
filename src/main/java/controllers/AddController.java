@@ -145,10 +145,8 @@ public class AddController implements Initializable {
                 allWatchedRead = "0";
             }
 
-            int genId = (int) (Math.random() * 1000) + 1; // random id 1-1000
-            manganime.mangaNimeIdProp().setValue("newid" + genId);
             manganime.titleProp().setValue(title);
-            manganime.listTypeProp().setValue("manga");
+            manganime.listTypeProp().setValue("anime");
             manganime.epiChapStartProp().setValue(parseInt(epiChapStart));
             manganime.epiChapEndProp().setValue(parseInt(epiChapEnd));
             manganime.totalEpiChapProp().setValue(parseInt(totalEpiChap));
@@ -157,12 +155,11 @@ public class AddController implements Initializable {
             manganime.endDateProp().setValue(endDate);
             manganime.stateProp().setValue(state);
             manganime.summaryProp().setValue(summary);
-            manganime.volumesProp().setValue(2);
+//            manganime.volumesProp().setValue(2);
 
             boolean isSuccess = manganime.insertMangaNime();
             if (isSuccess) {
                 //TODO: Reload form to empty all fields and reload manganime list tables
-                System.out.println("Status InsertID: " + manganime.mangaNimeIdProp().getValue());
             }
         } else if (event.getSource() == btnScreenSampUpload) {
             //TODO: button screen samp event codes

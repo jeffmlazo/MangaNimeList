@@ -4,14 +4,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import main.java.configs.DBUtil;
+import main.java.configs.DbUtil;
+import main.java.libraries.UtilSql;
 
 /**
  *
@@ -416,9 +416,10 @@ public class MangaNimeModel {
      */
     Connection conn;
     ResultSet rs = null;
+    PreparedStatement preparedStmt = null;
 
     public MangaNimeModel() {
-        conn = DBUtil.Connector();
+        conn = DbUtil.connector();
         if (conn == null) {
             System.out.println("Database connection failed!");
             System.exit(1);
@@ -439,12 +440,20 @@ public class MangaNimeModel {
         }
     }
 
+    /**
+     * Insert manganime data.
+     *
+     * @return error or success insert manganime
+     * @throws SQLException
+     */
     public boolean insertMangaNime() throws SQLException {
-        String query = "INSERT into manganime (manganime_id, list_type, title, epi_chap_start, epi_chap_end, total_epi_chap, all_watched_read, start_date, end_date, state, summary, volumes)"
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        // preparedStmt is already autocloseable so no need to add in the finally block
-        try (PreparedStatement preparedStmt = conn.prepareStatement(query);) {
-            preparedStmt.setString(1, getMangaNimeId());
+        try {
+            UtilSql utilSql = new UtilSql();
+            String mangaNimeId = utilSql.getRandGenId("manganime", "manganime_id");
+            String query = "INSERT into manganime (manganime_id, list_type, title, epi_chap_start, epi_chap_end, total_epi_chap, all_watched_read, start_date, end_date, state, summary, volumes)"
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setString(1, mangaNimeId);
             preparedStmt.setString(2, getListType());
             preparedStmt.setString(3, getTitle());
             preparedStmt.setInt(4, getEpiChapStart());
@@ -471,6 +480,9 @@ public class MangaNimeModel {
             if (rs != null) {
                 rs.close();
             }
+            if (preparedStmt != null) {
+                preparedStmt.close();
+            }
         }
 
         return true;
@@ -488,7 +500,8 @@ public class MangaNimeModel {
         ObservableList data = FXCollections.observableArrayList();
         String query = "SELECT * FROM manganime WHERE list_type = ?";
         // preparedStmt is already autocloseable so no need to add in the finally block
-        try (PreparedStatement preparedStmt = conn.prepareStatement(query, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);) {
+        try {
+            preparedStmt = conn.prepareStatement(query, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             preparedStmt.setString(1, listType);
             rs = preparedStmt.executeQuery();
             // Iterate all result set
@@ -521,6 +534,9 @@ public class MangaNimeModel {
         } finally {
             if (rs != null) {
                 rs.close();
+            }
+            if (preparedStmt != null) {
+                preparedStmt.close();
             }
         }
 

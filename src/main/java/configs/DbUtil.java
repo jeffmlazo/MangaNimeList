@@ -1,16 +1,17 @@
 package main.java.configs;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 /**
  *
  * @author jeprox
  */
-public class DBUtil {
+public class DbUtil {
 
     private static final String CONN_URL = "jdbc:sqlite:manganimelist_db.mnldb";
 
-    public static Connection Connector() {
+    public static Connection connector() {
         try {
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(CONN_URL);
