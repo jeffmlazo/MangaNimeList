@@ -11,7 +11,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import main.java.configs.DbUtil;
-import main.java.libraries.UtilSql;
+import main.java.libraries.SqlUtil;
 
 /**
  *
@@ -447,10 +447,11 @@ public class MangaNimeModel {
      * @throws SQLException
      */
     public boolean insertMangaNime() throws SQLException {
+        boolean isSuccess = false;
         try {
-            UtilSql utilSql = new UtilSql();
+            SqlUtil utilSql = new SqlUtil();
             String mangaNimeId = utilSql.getRandGenId("manganime", "manganime_id");
-            String query = "INSERT into manganime (manganime_id, list_type, title, epi_chap_start, epi_chap_end, total_epi_chap, all_watched_read, start_date, end_date, state, summary, volumes)"
+            String query = "INSERT INTO manganime (manganime_id, list_type, title, epi_chap_start, epi_chap_end, total_epi_chap, all_watched_read, start_date, end_date, state, summary, volumes)"
                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             preparedStmt = conn.prepareStatement(query);
             preparedStmt.setString(1, mangaNimeId);
@@ -468,10 +469,14 @@ public class MangaNimeModel {
 
             int affected = preparedStmt.executeUpdate();
             if (affected == 1) {
-                //TODO: Need to figure out what to put here probably log method
+                LogModel log = new LogModel();
+                log.tableNameProp().setValue("manganime");
+                log.mangaNimeIdProp().setValue(mangaNimeId);
+                if (log.insertLog()) {
+                    isSuccess = true;
+                }
             } else {
                 System.err.println("No rows affected");
-                return false;
             }
 
         } catch (Exception e) {
@@ -485,7 +490,7 @@ public class MangaNimeModel {
             }
         }
 
-        return true;
+        return isSuccess;
     }
 
     /**

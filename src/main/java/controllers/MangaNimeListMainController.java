@@ -3,6 +3,9 @@ package main.java.controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +23,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import main.java.libraries.RandChar;
 import main.java.models.MangaNimeModel;
 
 /**
@@ -95,6 +97,16 @@ public class MangaNimeListMainController implements Initializable {
             System.out.println("Connected Success!");
             createMangaNimeTbl("anime");
             createMangaNimeTbl("manga");
+//            ArrayList<Object> arrListData = new ArrayList<>();
+//            arrListData.add("dd");
+//            arrListData.add(22);
+//            arrListData.add(2.2);
+//            Iterator iteratorArr = arrListData.iterator();
+//            while (iteratorArr.hasNext()) {
+//                Object obj = iteratorArr.next();
+//
+//                System.out.println("The value of the Object: " + obj);
+//            }
         } else {
             System.out.println("Connected Failed!");
         }

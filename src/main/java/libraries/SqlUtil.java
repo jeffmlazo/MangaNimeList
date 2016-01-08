@@ -10,13 +10,13 @@ import main.java.configs.DbUtil;
  *
  * @author jeprox
  */
-public class UtilSql {
+public class SqlUtil {
 
     Connection conn;
     ResultSet rs = null;
     PreparedStatement preparedStmt = null;
 
-    public UtilSql() {
+    public SqlUtil() {
         conn = DbUtil.connector();
         if (conn == null) {
             System.out.println("Database connection failed!");
@@ -31,7 +31,7 @@ public class UtilSql {
      * id.
      *
      * @param tableName the table name in the database
-     * @param ColumnName the column name in the database
+     * @param columnName the column name in the database
      * @return random generated string id
      * @throws SQLException
      */

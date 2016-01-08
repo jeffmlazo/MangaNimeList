@@ -16,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -35,6 +36,8 @@ public class AddController implements Initializable {
     private GenreModel genre = new GenreModel();
     private MangaNimeModel manganime = new MangaNimeModel();
 
+    @FXML
+    private GridPane gridPaneForm;
     @FXML
     private GridPane gridPaneGenre;
     @FXML
@@ -71,6 +74,8 @@ public class AddController implements Initializable {
     private Button btnAdd;
     @FXML
     private Button btnClose;
+    @FXML
+    private Label lblStatus;
 
     /**
      * Initializes the controller class.
@@ -118,6 +123,9 @@ public class AddController implements Initializable {
             for (MangaNimeIsWatchedRead isWatchedRead : enumsWatchedRead) {
                 cboAllWatchedRead.getItems().add(isWatchedRead.getWatchedRead());
             }
+
+            // Set a default value for EpiChapStart to 1
+            tfEpiChapStart.setText("1");
         } catch (SQLException ex) {
             Logger.getLogger(AddController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -157,9 +165,9 @@ public class AddController implements Initializable {
             manganime.summaryProp().setValue(summary);
 //            manganime.volumesProp().setValue(2);
 
-            boolean isSuccess = manganime.insertMangaNime();
-            if (isSuccess) {
+            if (manganime.insertMangaNime()) {
                 //TODO: Reload form to empty all fields and reload manganime list tables
+                lblStatus.setText("Anime was successfully added!");
             }
         } else if (event.getSource() == btnScreenSampUpload) {
             //TODO: button screen samp event codes
