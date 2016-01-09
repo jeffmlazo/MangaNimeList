@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.ListIterator;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -418,6 +420,10 @@ public class MangaNimeModel {
     ResultSet rs = null;
     PreparedStatement preparedStmt = null;
 
+    /**
+     * Create MangaNimeModel with connection check in the database. If database
+     * connection fails the system will close.
+     */
     public MangaNimeModel() {
         conn = DbUtil.connector();
         if (conn == null) {
@@ -449,23 +455,70 @@ public class MangaNimeModel {
     public boolean insertMangaNime() throws SQLException {
         boolean isSuccess = false;
         try {
+            ArrayList<String> cols = new ArrayList<>();
+            cols.add("manganime_id");
+            cols.add("list_type");
+            cols.add("title");
+            cols.add("epi_chap_start");
+            cols.add("epi_chap_end");
+            cols.add("total_epi_chap");
+            cols.add("all_watched_read");
+            cols.add("start_date");
+            cols.add("end_date");
+            cols.add("state");
+            cols.add("summary");
+            cols.add("volumes");
+
+            ListIterator<String> iteratorCols = cols.listIterator();
+            StringBuilder buildStrCols = new StringBuilder();
+            StringBuilder buildStrVals = new StringBuilder();
+            while (iteratorCols.hasNext()) {
+
+                String colsName = iteratorCols.next();
+                buildStrCols.append(colsName);
+                buildStrVals.append('?');
+
+                if (iteratorCols.nextIndex() == cols.size()) {
+                    break;
+                }
+
+                buildStrCols.append(',');
+                buildStrVals.append(',');
+
+            }
+
             SqlUtil utilSql = new SqlUtil();
             String mangaNimeId = utilSql.getRandGenId("manganime", "manganime_id");
-            String query = "INSERT INTO manganime (manganime_id, list_type, title, epi_chap_start, epi_chap_end, total_epi_chap, all_watched_read, start_date, end_date, state, summary, volumes)"
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO manganime (" + buildStrCols.toString() + ") VALUES (" + buildStrVals + ")";
             preparedStmt = conn.prepareStatement(query);
-            preparedStmt.setString(1, mangaNimeId);
-            preparedStmt.setString(2, getListType());
-            preparedStmt.setString(3, getTitle());
-            preparedStmt.setInt(4, getEpiChapStart());
-            preparedStmt.setInt(5, getEpiChapEnd());
-            preparedStmt.setInt(6, getTotalEpiChap());
-            preparedStmt.setString(7, getAllWatchedRead());
-            preparedStmt.setString(8, getStartDate());
-            preparedStmt.setString(9, getEndDate());
-            preparedStmt.setString(10, getState());
-            preparedStmt.setString(11, getSummary());
-            preparedStmt.setInt(12, getVolumes());
+            ArrayList<Object> objVals = new ArrayList<>();
+            objVals.add(mangaNimeId);
+            objVals.add(getListType());
+            objVals.add(getTitle());
+            objVals.add(getEpiChapStart());
+            objVals.add(getEpiChapEnd());
+            objVals.add(getTotalEpiChap());
+            objVals.add(getAllWatchedRead());
+            objVals.add(getStartDate());
+            objVals.add(getState());
+            objVals.add(getSummary());
+            objVals.add(getVolumes());
+
+            ListIterator<Object> iteratorVals = objVals.listIterator();
+            int paramIndex = 1;
+            while (iteratorVals.hasNext()) {
+
+                Object obj = iteratorVals.next();
+                if (obj.getClass().getSimpleName().toLowerCase().contains("string")) {
+                    preparedStmt.setString(paramIndex, (String) obj);
+                } else if (obj.getClass().getSimpleName().toLowerCase().contains("long")) {
+                    preparedStmt.setLong(paramIndex, (long) obj);
+                } else if (obj.getClass().getSimpleName().toLowerCase().contains("integer")) {
+                    preparedStmt.setInt(paramIndex, (int) obj);
+                }
+
+                paramIndex++;
+            }
 
             int affected = preparedStmt.executeUpdate();
             if (affected == 1) {
@@ -500,7 +553,7 @@ public class MangaNimeModel {
      * @return all manganime details
      * @throws SQLException
      */
-    public ObservableList getAllMangaNime(String listType) throws SQLException {
+    public ObservableList<Object> getAllMangaNime(String listType) throws SQLException {
 
         ObservableList data = FXCollections.observableArrayList();
         String query = "SELECT * FROM manganime WHERE list_type = ?";

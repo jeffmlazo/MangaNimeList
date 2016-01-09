@@ -97,16 +97,6 @@ public class MangaNimeListMainController implements Initializable {
             System.out.println("Connected Success!");
             createMangaNimeTbl("anime");
             createMangaNimeTbl("manga");
-//            ArrayList<Object> arrListData = new ArrayList<>();
-//            arrListData.add("dd");
-//            arrListData.add(22);
-//            arrListData.add(2.2);
-//            Iterator iteratorArr = arrListData.iterator();
-//            while (iteratorArr.hasNext()) {
-//                Object obj = iteratorArr.next();
-//
-//                System.out.println("The value of the Object: " + obj);
-//            }
         } else {
             System.out.println("Connected Failed!");
         }
@@ -138,7 +128,7 @@ public class MangaNimeListMainController implements Initializable {
      */
     public void createMangaNimeTbl(String listType) {
         try {
-            ObservableList olMangaNime = mangaNime.getAllMangaNime(listType);
+            ObservableList<Object> olMangaNime = mangaNime.getAllMangaNime(listType);
             int numRows = olMangaNime.size();
 
             TableView tblViewList = tblViewAnime;

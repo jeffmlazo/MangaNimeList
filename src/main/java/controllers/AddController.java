@@ -4,11 +4,13 @@ import java.io.IOException;
 import static java.lang.Integer.parseInt;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,6 +26,7 @@ import javafx.scene.layout.GridPane;
 import main.java.models.GenreModel;
 import main.java.configs.Enums.MangaNimeIsWatchedRead;
 import main.java.configs.Enums.MangaNimeState;
+import main.java.libraries.FormValidation;
 import main.java.models.MangaNimeModel;
 
 /**
@@ -136,38 +139,73 @@ public class AddController implements Initializable {
 
         // Failed value state, allWatchedRead, 
         if (event.getSource() == btnAdd) {
+            String listType = "anime";
             String title = tfTitle.getText().trim();
-            String state = cboState.valueProperty().getValue().toString();
+            Object state = cboState.valueProperty().getValue();
             String totalEpiChap = tfTotalEpiChap.getText().trim();
-            String startDate = dpStartDate.getValue().toString();
-            String endDate = dpEndDate.getValue().toString();
-            String allWatchedRead = cboAllWatchedRead.valueProperty().getValue().toString();
+            LocalDate startDate = dpStartDate.getValue();
+            LocalDate endDate = dpEndDate.getValue();
+            Object allWatchedRead = cboAllWatchedRead.valueProperty().getValue();
             String epiChapStart = tfEpiChapStart.getText().trim();
             String epiChapEnd = tfEpiChapEnd.getText().trim();
             String summary = taSummary.getText().trim();
 
-            // Check if the value was yes or no then reassign the new value to 1 or 0 
-            if (allWatchedRead.equals("yes")) {
-                allWatchedRead = "1";
-            } else {
-                allWatchedRead = "0";
+            LinkedHashMap<String, Object> mapObjCtrls = new LinkedHashMap<>();
+            String keyTotalEpiChap = "Total Episodes";
+            String keyStartDate = "Release Date";
+            String keyAllWatchedRead = "All Watched";
+            String keyEpiChapStart = "Episode Start";
+            String keyEpiChapEnd = "Episode End";
+
+            if (listType.equals("manga")) {
+                keyTotalEpiChap = "Total Chapters ";
+                keyStartDate = "Publish Date";
+                keyAllWatchedRead = "All Read";
+                keyEpiChapStart = "Chapter Start";
+                keyEpiChapEnd = "Chapter End";
             }
 
-            manganime.titleProp().setValue(title);
-            manganime.listTypeProp().setValue("anime");
-            manganime.epiChapStartProp().setValue(parseInt(epiChapStart));
-            manganime.epiChapEndProp().setValue(parseInt(epiChapEnd));
-            manganime.totalEpiChapProp().setValue(parseInt(totalEpiChap));
-            manganime.allWatchedReadProp().setValue(allWatchedRead);
-            manganime.startDateProp().setValue(startDate);
-            manganime.endDateProp().setValue(endDate);
-            manganime.stateProp().setValue(state);
-            manganime.summaryProp().setValue(summary);
+            mapObjCtrls.put("Title", title);
+            mapObjCtrls.put("State", state);
+            mapObjCtrls.put(keyTotalEpiChap, totalEpiChap);
+            mapObjCtrls.put(keyStartDate, startDate);
+            mapObjCtrls.put("End Date", endDate);
+            mapObjCtrls.put(keyAllWatchedRead, allWatchedRead);
+            mapObjCtrls.put(keyEpiChapStart, epiChapStart);
+            mapObjCtrls.put(keyEpiChapEnd, epiChapEnd);
+
+            ArrayList<String> errors = FormValidation.ValidateForm(mapObjCtrls);
+            Iterator<String> iterator = errors.listIterator();
+            while (iterator.hasNext()) {
+                String error = iterator.next();
+                System.out.println(error);
+            }
+
+            // Check if no errors has been return means that all form fields have pass
+            if (errors.isEmpty()) {
+                // Check if the value was yes or no then reassign the new value to 1 or 0 
+                if (allWatchedRead.equals("yes")) {
+                    allWatchedRead = "1";
+                } else {
+                    allWatchedRead = "0";
+                }
+
+                manganime.titleProp().setValue(title);
+                manganime.listTypeProp().setValue(listType);
+                manganime.epiChapStartProp().setValue(parseInt(epiChapStart));
+                manganime.epiChapEndProp().setValue(parseInt(epiChapEnd));
+                manganime.totalEpiChapProp().setValue(parseInt(totalEpiChap));
+                manganime.allWatchedReadProp().setValue(allWatchedRead.toString());
+                manganime.startDateProp().setValue(startDate.toString());
+                manganime.endDateProp().setValue(endDate.toString());
+                manganime.stateProp().setValue(state.toString());
+                manganime.summaryProp().setValue(summary);
 //            manganime.volumesProp().setValue(2);
 
-            if (manganime.insertMangaNime()) {
-                //TODO: Reload form to empty all fields and reload manganime list tables
-                lblStatus.setText("Anime was successfully added!");
+                if (manganime.insertMangaNime()) {
+                    //TODO: Reload form to empty all fields and reload manganime list tables
+                    lblStatus.setText("Anime was successfully added!");
+                }
             }
         } else if (event.getSource() == btnScreenSampUpload) {
             //TODO: button screen samp event codes

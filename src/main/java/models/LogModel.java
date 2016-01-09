@@ -325,6 +325,10 @@ public class LogModel {
     ResultSet rs = null;
     PreparedStatement preparedStmt = null;
 
+    /**
+     * Create LogModel with connection check in the database. If database
+     * connection fails the system will close.
+     */
     public LogModel() {
         conn = DbUtil.connector();
         if (conn == null) {
@@ -348,60 +352,59 @@ public class LogModel {
     }
 
     /**
-     * Insert log data. TODO: improve insert values such as looping all needed
-     * columns ex. for manganime model doesn't need genre_id etc..
+     * Insert log data.
      *
      * @return error or success insert log
      * @throws SQLException
      */
     public boolean insertLog() throws SQLException {
-        Calendar cal = Calendar.getInstance();
-        long currentDateTime = cal.getTimeInMillis();
-        setCreatedOn(currentDateTime);
-
-        ArrayList<String> cols = new ArrayList<>();
-        cols.add("log_id");
-        cols.add("table_name");
-        if (getAction() != null) {
-            cols.add("action");
-        }
-        cols.add("created_on");
-        if (getInfo() != null) {
-            cols.add("info");
-        }
-        if (getMangaNimeId() != null) {
-            cols.add("manganime_id");
-        }
-        if (getImageId() != null) {
-            cols.add("image_id");
-        }
-        if (getGenreId() != null) {
-            cols.add("genre_id");
-        }
-        if (getGenresId() != null) {
-            cols.add("genres_id");
-        }
-
-        ListIterator<String> iteratorCols = cols.listIterator();
-        StringBuilder buildStrCols = new StringBuilder();
-        StringBuilder buildStrVals = new StringBuilder();
-        while (iteratorCols.hasNext()) {
-
-            String colsName = iteratorCols.next();
-            buildStrCols.append(colsName);
-            buildStrVals.append('?');
-
-            if (iteratorCols.nextIndex() == cols.size()) {
-                break;
-            }
-
-            buildStrCols.append(',');
-            buildStrVals.append(',');
-
-        }
-
         boolean isSuccess = false;
         try {
+            Calendar cal = Calendar.getInstance();
+            long currentDateTime = cal.getTimeInMillis();
+            setCreatedOn(currentDateTime);
+
+            ArrayList<String> cols = new ArrayList<>();
+            cols.add("log_id");
+            cols.add("table_name");
+            if (getAction() != null) {
+                cols.add("action");
+            }
+            cols.add("created_on");
+            if (getInfo() != null) {
+                cols.add("info");
+            }
+            if (getMangaNimeId() != null) {
+                cols.add("manganime_id");
+            }
+            if (getImageId() != null) {
+                cols.add("image_id");
+            }
+            if (getGenreId() != null) {
+                cols.add("genre_id");
+            }
+            if (getGenresId() != null) {
+                cols.add("genres_id");
+            }
+
+            ListIterator<String> iteratorCols = cols.listIterator();
+            StringBuilder buildStrCols = new StringBuilder();
+            StringBuilder buildStrVals = new StringBuilder();
+            while (iteratorCols.hasNext()) {
+
+                String colsName = iteratorCols.next();
+                buildStrCols.append(colsName);
+                buildStrVals.append('?');
+
+                if (iteratorCols.nextIndex() == cols.size()) {
+                    break;
+                }
+
+                buildStrCols.append(',');
+                buildStrVals.append(',');
+
+            }
+
             SqlUtil utilSql = new SqlUtil();
             String logId = utilSql.getRandGenId("log", "log_id");
             String query = "INSERT INTO log (" + buildStrCols.toString() + ") VALUES (" + buildStrVals + ")";
@@ -434,11 +437,11 @@ public class LogModel {
             while (iteratorVals.hasNext()) {
 
                 Object obj = iteratorVals.next();
-                if (obj.getClass().getName().contains("String")) {
+                if (obj.getClass().getSimpleName().toLowerCase().contains("string")) {
                     preparedStmt.setString(paramIndex, (String) obj);
-                } else if (obj.getClass().getName().contains("Long")) {
+                } else if (obj.getClass().getSimpleName().toLowerCase().contains("long")) {
                     preparedStmt.setLong(paramIndex, (long) obj);
-                } else if (obj.getClass().getName().contains("Integer")) {
+                } else if (obj.getClass().getSimpleName().toLowerCase().contains("integer")) {
                     preparedStmt.setInt(paramIndex, (int) obj);
                 }
 
