@@ -466,8 +466,12 @@ public class MangaNimeModel {
             cols.add("start_date");
             cols.add("end_date");
             cols.add("state");
-            cols.add("summary");
-            cols.add("volumes");
+            if (getSummary() != null) {
+                cols.add("summary");
+            }
+            if (getVolumes() != null) {
+                cols.add("volumes");
+            }
 
             ListIterator<String> iteratorCols = cols.listIterator();
             StringBuilder buildStrCols = new StringBuilder();
@@ -500,9 +504,14 @@ public class MangaNimeModel {
             objVals.add(getTotalEpiChap());
             objVals.add(getAllWatchedRead());
             objVals.add(getStartDate());
+            objVals.add(getEndDate());
             objVals.add(getState());
-            objVals.add(getSummary());
-            objVals.add(getVolumes());
+            if (getSummary() != null) {
+                objVals.add(getSummary());
+            }
+            if (getVolumes() != null) {
+                objVals.add(getVolumes());
+            }
 
             ListIterator<Object> iteratorVals = objVals.listIterator();
             int paramIndex = 1;

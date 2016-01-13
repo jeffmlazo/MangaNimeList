@@ -62,9 +62,9 @@
                 <ToolBar>
                     <items>
                         <Button fx:id="tbrBtnAdd" mnemonicParsing="false" onAction="#handleButtonAction" text="Add" />
-                        <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="View" />
-                        <Button layoutX="10.0" layoutY="13.0" mnemonicParsing="false" text="Update" />
-                        <Button layoutX="56.0" layoutY="13.0" mnemonicParsing="false" text="Delete" />
+                        <Button fx:id="tbrBtnView" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleButtonAction" text="View" />
+                        <Button fx:id="tbrBtnUpdate" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Update" />
+                        <Button fx:id="tbrBtnDelete" layoutX="56.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Delete" />
                     </items>
                 </ToolBar>
             </children>
@@ -109,7 +109,7 @@
                         </HBox>
                         <TabPane tabClosingPolicy="UNAVAILABLE" GridPane.columnSpan="2" GridPane.rowIndex="1">
                             <tabs>
-                                <Tab fx:id="tabAnime" text="Anime">
+                                <Tab fx:id="tabAnime" closable="false" text="Anime">
                                     <content>
                                         <TableView fx:id="tblViewAnime">
                                             <columns>
@@ -134,7 +134,7 @@
                                         </TableView>
                                     </content>
                                 </Tab>
-                                <Tab fx:id="tabManga" text="Manga">
+                                <Tab fx:id="tabManga" closable="false" text="Manga">
                                     <content>
                                         <TableView fx:id="tblViewManga" prefHeight="573.0" prefWidth="800.0">
                                             <columns>

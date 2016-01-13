@@ -18,6 +18,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -32,12 +33,22 @@ import main.java.models.MangaNimeModel;
  */
 public class MangaNimeListMainController implements Initializable {
 
-    private final MangaNimeModel mangaNime = new MangaNimeModel();
+    private final MangaNimeModel manganime = new MangaNimeModel();
 
+    @FXML
+    private Tab tabAnime;
+    @FXML
+    private Tab tabManga;
     @FXML
     private TextField tfSearch;
     @FXML
     private Button tbrBtnAdd;
+    @FXML
+    private Button tbrBtnView;
+    @FXML
+    private Button tbrBtnUpdate;
+    @FXML
+    private Button tbrBtnDelete;
     @FXML
     private TableView<MangaNimeModel> tblViewAnime;
     @FXML
@@ -93,32 +104,67 @@ public class MangaNimeListMainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        if (mangaNime.isDbConnected()) {
-            System.out.println("Connected Success!");
+        if (manganime.isDbConnected()) {
             createMangaNimeTbl("anime");
             createMangaNimeTbl("manga");
-        } else {
-            System.out.println("Connected Failed!");
         }
     }
 
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException {
+        Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader();
+        String stageTitle = "";
+
+        String listType = "manga";
+        if (tabAnime.isSelected()) {
+            listType = "anime";
+        }
 
         if (event.getSource() == tbrBtnAdd) {
-            Stage stage = new Stage();
-            //load up other FXML document
-            Parent root = FXMLLoader.load(getClass().getResource("/main/resources/views/anime/AddAnimeModal.fxml"));
-//            Parent root = FXMLLoader.load(getClass().getResource("/main/resources/views/anime/UpdateAnimeModal.fxml"));
-//            Parent root = FXMLLoader.load(getClass().getResource("/main/resources/views/anime/ViewAnimeModal.fxml"));
-//            Parent root = FXMLLoader.load(getClass().getResource("/main/resources/views/manga/AddMangaModal.fxml"));
-            //create a new scene with root and set the stage
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/main/resources/css/global.css").toExternalForm());
-            stage.setScene(scene);
-            stage.setTitle("Add New");
-            stage.show();
+            // Check if what tab is actively selected
+            if (tabAnime.isSelected()) {
+                stageTitle = "Add Anime";
+                loader.setLocation(getClass().getResource("/main/resources/views/anime/AddAnimeModal.fxml"));
+
+            } else {
+                stageTitle = "Add Manga";
+                loader.setLocation(getClass().getResource("/main/resources/views/manga/AddMangaModal.fxml"));
+            }
+
+            AddController controller = new AddController();
+            controller.setListType(listType);
+            loader.setController(controller);
+
+        } else if (event.getSource() == tbrBtnView) {
+            // Check if what tab is actively selected
+            if (tabAnime.isSelected()) {
+                stageTitle = "View Anime";
+                loader.setLocation(getClass().getResource("/main/resources/views/anime/ViewAnimeModal.fxml"));
+            } else {
+                stageTitle = "View Manga";
+                loader.setLocation(getClass().getResource("/main/resources/views/manga/ViewMangaModal.fxml"));
+            }
+        } else if (event.getSource() == tbrBtnUpdate) {
+            // Check if what tab is actively selected
+            if (tabAnime.isSelected()) {
+                stageTitle = "Update Anime";
+                loader.setLocation(getClass().getResource("/main/resources/views/anime/UpdateAnimeModal.fxml"));
+            } else {
+                stageTitle = "UpdateManga";
+                loader.setLocation(getClass().getResource("/main/resources/views/manga/UpdateMangaModal.fxml"));
+            }
+        } else if (event.getSource() == tbrBtnDelete) {
+            System.out.println("Delete Button Triggered");
         }
+
+        //create a new scene with root and set the stage
+        Parent root = (Parent) loader.load();
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/main/resources/css/global.css").toExternalForm());
+        stage.setScene(scene);
+        stage.setTitle(stageTitle);
+        stage.show();
     }
 
     /**
@@ -128,7 +174,7 @@ public class MangaNimeListMainController implements Initializable {
      */
     public void createMangaNimeTbl(String listType) {
         try {
-            ObservableList<Object> olMangaNime = mangaNime.getAllMangaNime(listType);
+            ObservableList<Object> olMangaNime = manganime.getAllMangaNime(listType);
             int numRows = olMangaNime.size();
 
             TableView tblViewList = tblViewAnime;

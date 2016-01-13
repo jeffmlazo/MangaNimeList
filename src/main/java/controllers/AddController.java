@@ -11,6 +11,8 @@ import java.util.LinkedHashMap;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,7 +29,9 @@ import main.java.models.GenreModel;
 import main.java.configs.Enums.MangaNimeIsWatchedRead;
 import main.java.configs.Enums.MangaNimeState;
 import main.java.libraries.FormValidation;
+import main.java.libraries.MsgBox;
 import main.java.models.MangaNimeModel;
+import static java.lang.Integer.parseInt;
 
 /**
  * Add anime or manga controller
@@ -37,7 +41,7 @@ import main.java.models.MangaNimeModel;
 public class AddController implements Initializable {
 
     private GenreModel genre = new GenreModel();
-    private MangaNimeModel manganime = new MangaNimeModel();
+    private final MangaNimeModel manganime = new MangaNimeModel();
 
     @FXML
     private GridPane gridPaneForm;
@@ -60,6 +64,8 @@ public class AddController implements Initializable {
     @FXML
     private TextField tfEpiChapEnd;
     @FXML
+    private TextField tfVolumes;
+    @FXML
     private ImageView imgvEpiChapInfo;
     @FXML
     private TextArea taSummary;
@@ -77,8 +83,17 @@ public class AddController implements Initializable {
     private Button btnAdd;
     @FXML
     private Button btnClose;
-    @FXML
-    private Label lblStatus;
+
+    private StringProperty listTypeProp = new SimpleStringProperty();
+
+    /**
+     * Set the list type of manga or anime.
+     *
+     * @param listType the type of list manga or anime
+     */
+    public void setListType(String listType) {
+        listTypeProp.setValue(listType);
+    }
 
     /**
      * Initializes the controller class.
@@ -139,7 +154,7 @@ public class AddController implements Initializable {
 
         // Failed value state, allWatchedRead, 
         if (event.getSource() == btnAdd) {
-            String listType = "anime";
+            String listType = listTypeProp.getValue();
             String title = tfTitle.getText().trim();
             Object state = cboState.valueProperty().getValue();
             String totalEpiChap = tfTotalEpiChap.getText().trim();
@@ -174,13 +189,19 @@ public class AddController implements Initializable {
             mapObjCtrls.put(keyEpiChapStart, epiChapStart);
             mapObjCtrls.put(keyEpiChapEnd, epiChapEnd);
 
-            ArrayList<String> errors = FormValidation.ValidateForm(mapObjCtrls);
-            Iterator<String> iterator = errors.listIterator();
-            while (iterator.hasNext()) {
-                String error = iterator.next();
-                System.out.println(error);
+            if (listType.equals("manga")) {
+                mapObjCtrls.put("Volumes", tfVolumes.getText().trim());
             }
 
+            ArrayList<String> errors = FormValidation.ValidateForm(mapObjCtrls);
+            Iterator<String> iterator = errors.listIterator();
+            StringBuilder strBuildErr = new StringBuilder();
+            while (iterator.hasNext()) {
+                String error = iterator.next();
+                strBuildErr.append(error).append('\n');
+            }
+
+            MsgBox msgBox = new MsgBox();
             // Check if no errors has been return means that all form fields have pass
             if (errors.isEmpty()) {
                 // Check if the value was yes or no then reassign the new value to 1 or 0 
@@ -200,12 +221,24 @@ public class AddController implements Initializable {
                 manganime.endDateProp().setValue(endDate.toString());
                 manganime.stateProp().setValue(state.toString());
                 manganime.summaryProp().setValue(summary);
-//            manganime.volumesProp().setValue(2);
+
+                if (listType.equals("manga")) {
+                    manganime.volumesProp().setValue(parseInt(tfVolumes.getText().trim()));
+                }
 
                 if (manganime.insertMangaNime()) {
                     //TODO: Reload form to empty all fields and reload manganime list tables
-                    lblStatus.setText("Anime was successfully added!");
+                    ArrayList<String> success = new ArrayList<>();
+                    String msgTitle = "Anime";
+                    if (listType.equals("manga")) {
+                        msgTitle = "Manga";
+                    }
+                    success.add(msgTitle + " was successfully added!");
+                    msgBox.showModal(success, "success");
                 }
+            } else {
+//                gridPaneForm.getChildren().add(errorlbl);
+                msgBox.showModal(errors, "error");
             }
         } else if (event.getSource() == btnScreenSampUpload) {
             //TODO: button screen samp event codes
