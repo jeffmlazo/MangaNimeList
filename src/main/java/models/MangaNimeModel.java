@@ -13,6 +13,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import main.java.configs.DbUtil;
+import main.java.libraries.DateTimeFormatter;
 import main.java.libraries.SqlUtil;
 
 /**
@@ -38,6 +39,8 @@ public class MangaNimeModel {
     private StringProperty stateStrProp;
     private StringProperty summaryStrProp;
     private IntegerProperty volumesIntProp;
+    private StringProperty authorStrProp;
+    private StringProperty createdOnStrProp;
 
     /**
      * The property of the manganime id of manga or anime.
@@ -411,6 +414,68 @@ public class MangaNimeModel {
         return volumesProp().get();
     }
 
+    /**
+     * The property of author of manga.
+     *
+     * @return the property of author of manga
+     */
+    public StringProperty authorProp() {
+        if (authorStrProp == null) {
+            authorStrProp = new SimpleStringProperty(this, "author");
+        }
+
+        return authorStrProp;
+    }
+
+    /**
+     * Set the author of manga.
+     *
+     * @param author the author of manga
+     */
+    public void setAuthor(String author) {
+        authorProp().set(author);
+    }
+
+    /**
+     * Get the author of manga.
+     *
+     * @return the author of manga
+     */
+    public String getAuthor() {
+        return authorProp().get();
+    }
+
+    /**
+     * The property of created on of manga or anime.
+     *
+     * @return the property of created on of manga or anime
+     */
+    public StringProperty createdOnProp() {
+        if (createdOnStrProp == null) {
+            createdOnStrProp = new SimpleStringProperty(this, "createdOn");
+        }
+
+        return createdOnStrProp;
+    }
+
+    /**
+     * Set the created on of manga or anime.
+     *
+     * @param createdOn the date created of manga or anime
+     */
+    public void setCreatedOn(String createdOn) {
+        createdOnProp().set(createdOn);
+    }
+
+    /**
+     * Get the created on of manga or anime.
+     *
+     * @return the created on of manga or anime
+     */
+    public String getCreatedOn() {
+        return createdOnProp().get();
+    }
+
     /*
      * *****************************************
      * QUERIES
@@ -472,6 +537,9 @@ public class MangaNimeModel {
             if (getVolumes() != null) {
                 cols.add("volumes");
             }
+            if (getAuthor() != null) {
+                cols.add("author");
+            }
 
             ListIterator<String> iteratorCols = cols.listIterator();
             StringBuilder buildStrCols = new StringBuilder();
@@ -511,6 +579,9 @@ public class MangaNimeModel {
             }
             if (getVolumes() != null) {
                 objVals.add(getVolumes());
+            }
+            if (getAuthor() != null) {
+                objVals.add(getAuthor());
             }
 
             ListIterator<Object> iteratorVals = objVals.listIterator();
@@ -565,11 +636,18 @@ public class MangaNimeModel {
     public ObservableList<Object> getAllMangaNime(String listType) throws SQLException {
 
         ObservableList data = FXCollections.observableArrayList();
-        String query = "SELECT * FROM manganime WHERE list_type = ?";
+        String query = "SELECT manganime.*, log.created_on "
+                + "FROM manganime "
+                + "LEFT JOIN log "
+                + "ON log.manganime_id = manganime.manganime_id "
+                + "WHERE list_type = ? "
+                + "AND log.action = ?"
+                + "ORDER BY title ASC";
         // preparedStmt is already autocloseable so no need to add in the finally block
         try {
             preparedStmt = conn.prepareStatement(query, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             preparedStmt.setString(1, listType);
+            preparedStmt.setString(2, "created");
             rs = preparedStmt.executeQuery();
             // Iterate all result set
             while (rs.next()) {
@@ -582,6 +660,7 @@ public class MangaNimeModel {
 
                 if (listType.equals("manga")) {
                     mangaNimeData.setVolumes(rs.getInt("volumes"));
+                    mangaNimeData.setAuthor(rs.getString("author"));
                 }
 
                 String isAllWacthedRead = "no";
@@ -593,6 +672,7 @@ public class MangaNimeModel {
                 mangaNimeData.setStartDate(rs.getString("start_date"));
                 mangaNimeData.setEndDate(rs.getString("end_date"));
                 mangaNimeData.setState(rs.getString("state"));
+                mangaNimeData.setCreatedOn(DateTimeFormatter.formatDateTime(rs.getLong("created_on")));
                 data.add(mangaNimeData);
             }
 

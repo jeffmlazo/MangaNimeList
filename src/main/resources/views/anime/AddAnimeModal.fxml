@@ -31,7 +31,7 @@
                             <rowConstraints>
                                 <RowConstraints minHeight="10.0" prefHeight="50.0" />
                                 <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="15.0" valignment="TOP" />
-                                <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -57,49 +57,44 @@
                                 <RowConstraints minHeight="10.0" prefHeight="50.0" valignment="BOTTOM" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Label text="Anime" GridPane.columnSpan="2" GridPane.halignment="CENTER" />
+                                <Label fx:id="lblH3" text="Anime" GridPane.columnSpan="2" GridPane.halignment="CENTER" />
                                 <Separator prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" />
-                                <Label text="List Type" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                                <Label layoutX="10.0" layoutY="75.0" text="Title" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                                     <GridPane.margin>
                                         <Insets />
                                     </GridPane.margin>
                                 </Label>
-                                <Label layoutX="10.0" layoutY="75.0" text="Title" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                                <Label text="State" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
                                     <GridPane.margin>
                                         <Insets />
                                     </GridPane.margin>
                                 </Label>
-                                <Label text="State" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+                                <Label text="Total Episodes" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
                                     <GridPane.margin>
                                         <Insets />
                                     </GridPane.margin>
                                 </Label>
-                                <Label text="Total Episodes" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
+                                <Label text="Release Date" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
                                     <GridPane.margin>
                                         <Insets />
                                     </GridPane.margin>
                                 </Label>
-                                <Label text="Release Date" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
+                                <Label text="End Date" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
                                     <GridPane.margin>
                                         <Insets />
                                     </GridPane.margin>
                                 </Label>
-                                <Label text="End Date" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
+                                <Label text="All Watched" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
                                     <GridPane.margin>
                                         <Insets />
                                     </GridPane.margin>
                                 </Label>
-                                <Label text="All Watched" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="8">
+                                <Label text="Episodes" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="8">
                                     <GridPane.margin>
                                         <Insets />
                                     </GridPane.margin>
                                 </Label>
-                                <Label text="Episodes" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="9">
-                                    <GridPane.margin>
-                                        <Insets />
-                                    </GridPane.margin>
-                                </Label>
-                                <Label text="Summary" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="10">
+                                <Label text="Summary" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="9">
                                     <GridPane.margin>
                                         <Insets />
                                     </GridPane.margin>
@@ -109,10 +104,9 @@
                                         <Insets />
                                     </GridPane.margin>
                                 </Label>
-                                <ComboBox fx:id="cboListType" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-                                <TextField fx:id="tfTitle" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-                                <ComboBox fx:id="cboState" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="4" />
-                                <HBox alignment="CENTER_LEFT" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                                <TextField fx:id="tfTitle" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+                                <ComboBox fx:id="cboState" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                                <HBox alignment="CENTER_LEFT" GridPane.columnIndex="2" GridPane.rowIndex="4">
                                     <GridPane.margin>
                                         <Insets />
                                     </GridPane.margin>
@@ -120,10 +114,10 @@
                                         <TextField fx:id="tfTotalEpiChap" prefWidth="50.0" />
                                     </children>
                                 </HBox>
-                                <DatePicker fx:id="dpStartDate" prefWidth="120.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="6" />
-                                <DatePicker fx:id="dpEndDate" layoutX="135.0" layoutY="193.0" prefWidth="120.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="7" />
-                                <ComboBox fx:id="cboAllWatchedRead" layoutX="210.0" layoutY="133.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="8" />
-                                <HBox alignment="CENTER" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="9">
+                                <DatePicker fx:id="dpStartDate" prefWidth="120.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="5" />
+                                <DatePicker fx:id="dpEndDate" layoutX="135.0" layoutY="193.0" prefWidth="120.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="6" />
+                                <ComboBox fx:id="cboAllWatchedRead" layoutX="210.0" layoutY="133.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="7" />
+                                <HBox alignment="CENTER" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="8">
                                     <children>
                                         <TextField fx:id="tfEpiChapStart" alignment="CENTER" prefWidth="80.0" promptText="Start" />
                                         <Separator prefWidth="20.0">
@@ -137,7 +131,7 @@
                                         <TextField fx:id="tfEpiChapEnd" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefWidth="80.0" promptText="End" />
                                     </children>
                                 </HBox>
-                                <TextArea fx:id="taSummary" prefHeight="200.0" prefWidth="200.0" promptText="Short Description..." GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="10" GridPane.rowSpan="6">
+                                <TextArea fx:id="taSummary" prefHeight="200.0" prefWidth="200.0" promptText="Short Description..." GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="9" GridPane.rowSpan="7">
                                     <GridPane.margin>
                                         <Insets bottom="5.0" />
                                     </GridPane.margin>
@@ -165,7 +159,7 @@
                                         <Insets />
                                     </GridPane.margin>
                                 </ImageView>
-                                <ImageView fx:id="imgvEpiInfo" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="9">
+                                <ImageView fx:id="imgvEpiInfo" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="8">
                                     <image>
                                         <Image url="@../../images/info.png" />
                                     </image>

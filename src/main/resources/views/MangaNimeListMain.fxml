@@ -109,7 +109,7 @@
                         </HBox>
                         <TabPane tabClosingPolicy="UNAVAILABLE" GridPane.columnSpan="2" GridPane.rowIndex="1">
                             <tabs>
-                                <Tab fx:id="tabAnime" closable="false" text="Anime">
+                                <Tab fx:id="tabAnime" closable="false" onSelectionChanged="#onTabSelect" text="Anime">
                                     <content>
                                         <TableView fx:id="tblViewAnime">
                                             <columns>
@@ -134,7 +134,7 @@
                                         </TableView>
                                     </content>
                                 </Tab>
-                                <Tab fx:id="tabManga" closable="false" text="Manga">
+                                <Tab fx:id="tabManga" closable="false" onSelectionChanged="#onTabSelect" text="Manga">
                                     <content>
                                         <TableView fx:id="tblViewManga" prefHeight="573.0" prefWidth="800.0">
                                             <columns>
@@ -151,6 +151,7 @@
                                                 <TableColumn fx:id="colMangaAllRead" prefWidth="75.0" text="All Read" />
                                                 <TableColumn fx:id="colMangaPublishDate" text="Publish Date" />
                                                 <TableColumn fx:id="colMangaEndDate" prefWidth="70.0" text="End Date" />
+                                                <TableColumn fx:id="colMangaAuthor" prefWidth="70.0" text="Author" />
                                                 <TableColumn fx:id="colMangaState" prefWidth="70.0" text="State" />
                                                 <TableColumn fx:id="colMangaCreatedOn" prefWidth="75.0" text="Created On" />
                                             </columns>
@@ -164,10 +165,10 @@
                         </TabPane>
                         <HBox alignment="CENTER_LEFT" GridPane.rowIndex="2">
                             <children>
-                                <Label fx:id="lblAniTblEntries" alignment="TOP_LEFT" text="Showing 99 of 100 entries" />
+                                <Label fx:id="lblTblEntries" alignment="TOP_LEFT" text="Showing 0 entries" />
                             </children>
                         </HBox>
-                        <HBox alignment="CENTER_RIGHT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <HBox alignment="CENTER_RIGHT" spacing="5.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2">
                             <children>
                                 <Button mnemonicParsing="false" text="Previous" />
                                 <Button mnemonicParsing="false" text="Next" />

@@ -11,7 +11,7 @@ import java.util.Set;
  */
 public class FormValidation {
 
-    public void FormValidation() {
+    public FormValidation() {
 
     }
 

@@ -3,14 +3,12 @@ package main.java.controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -34,11 +32,11 @@ import main.java.models.MangaNimeModel;
 public class MangaNimeListMainController implements Initializable {
 
     private final MangaNimeModel manganime = new MangaNimeModel();
+    private int animeNum;
+    private int mangaNum;
 
     @FXML
     private Tab tabAnime;
-    @FXML
-    private Tab tabManga;
     @FXML
     private TextField tfSearch;
     @FXML
@@ -72,8 +70,6 @@ public class MangaNimeListMainController implements Initializable {
     @FXML
     private TableColumn<MangaNimeModel, Object> colAniCreatedOn;
     @FXML
-    private Label lblAniTblEntries;
-    @FXML
     private TableView<MangaNimeModel> tblViewManga;
     @FXML
     private TableColumn<MangaNimeModel, String> colMangaId;
@@ -94,9 +90,13 @@ public class MangaNimeListMainController implements Initializable {
     @FXML
     private TableColumn<MangaNimeModel, String> colMangaEndDate;
     @FXML
+    private TableColumn<MangaNimeModel, String> colMangaAuthor;
+    @FXML
     private TableColumn<MangaNimeModel, String> colMangaState;
     @FXML
     private TableColumn<MangaNimeModel, String> colMangaCreatedOn;
+    @FXML
+    private Label lblTblEntries;
 
     /**
      * Initializes the controller class.
@@ -105,11 +105,20 @@ public class MangaNimeListMainController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         if (manganime.isDbConnected()) {
-            createMangaNimeTbl("anime");
-            createMangaNimeTbl("manga");
+            animeNum = createMangaNimeTbl("anime");
+            mangaNum = createMangaNimeTbl("manga");
+            // Lets just set the number of Anime numrow since it is the first tab that will be shown in the table view
+            lblTblEntries.setText("Showing " + animeNum + " entries");
         }
+
     }
 
+    /**
+     * Event handle for tool bar buttons.
+     *
+     * @param event
+     * @throws IOException
+     */
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException {
         Stage stage = new Stage();
@@ -168,14 +177,36 @@ public class MangaNimeListMainController implements Initializable {
     }
 
     /**
+     * Event handler for tab selection.
+     *
+     * @param e
+     */
+    @FXML
+    public void onTabSelect(Event e) {
+        Tab tab = (Tab) e.getSource();
+        // Check if the tab was selected and the label lblTblEntries is not null 
+        // this will prevent the error in runtime
+        if (tab.isSelected() && lblTblEntries != null) {
+            int entries = animeNum;
+            if (tab.getId().equals("tabManga")) {
+                entries = mangaNum;
+            }
+
+            lblTblEntries.setText("Showing " + entries + " entries");
+        }
+    }
+
+    /**
      * Generate a table view for manga or anime
      *
      * @param listType the list type of manga or anime.
+     * @return the number of rows
      */
-    public void createMangaNimeTbl(String listType) {
+    public int createMangaNimeTbl(String listType) {
+        int numRows = 0;
         try {
             ObservableList<Object> olMangaNime = manganime.getAllMangaNime(listType);
-            int numRows = olMangaNime.size();
+            numRows = olMangaNime.size();
 
             TableView tblViewList = tblViewAnime;
             TableColumn colMangaNimeId = colAniId;
@@ -187,7 +218,7 @@ public class MangaNimeListMainController implements Initializable {
             TableColumn colStartDate = colAniReleaseDate;
             TableColumn colEndDate = colAniEndDate;
             TableColumn colState = colAniState;
-            Label lblTblEntries = lblAniTblEntries;
+            TableColumn colCreatedOn = colAniCreatedOn;
 
             if (listType.equals("manga")) {
                 tblViewList = tblViewManga;
@@ -201,6 +232,8 @@ public class MangaNimeListMainController implements Initializable {
                 colEndDate = colMangaEndDate;
                 colState = colMangaState;
                 colMangaVolumes.setCellValueFactory(new PropertyValueFactory("volumes"));
+                colMangaAuthor.setCellValueFactory(new PropertyValueFactory("author"));
+                colCreatedOn = colMangaCreatedOn;
             }
 
             tblViewList.setItems(olMangaNime);
@@ -213,10 +246,12 @@ public class MangaNimeListMainController implements Initializable {
             colStartDate.setCellValueFactory(new PropertyValueFactory("startDate"));
             colEndDate.setCellValueFactory(new PropertyValueFactory("endDate"));
             colState.setCellValueFactory(new PropertyValueFactory("state"));
-            lblTblEntries.setText("Showing " + numRows + " entries");
+            colCreatedOn.setCellValueFactory(new PropertyValueFactory("createdOn"));
 
         } catch (SQLException ex) {
             Logger.getLogger(MangaNimeListMainController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return numRows;
     }
+
 }

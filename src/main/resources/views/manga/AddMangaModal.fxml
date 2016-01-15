@@ -40,6 +40,7 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -58,44 +59,39 @@
                                 <RowConstraints minHeight="10.0" prefHeight="50.0" valignment="BOTTOM" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Label text="Anime" GridPane.columnSpan="2" GridPane.halignment="CENTER" />
+                                <Label fx:id="lblH3" text="Manga" GridPane.columnSpan="2" GridPane.halignment="CENTER" />
                                 <Separator prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" />
-                                <Label text="List Type" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                                <Label layoutX="10.0" layoutY="75.0" text="Title" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                                     <GridPane.margin>
                                         <Insets />
                                     </GridPane.margin>
                                 </Label>
-                                <Label layoutX="10.0" layoutY="75.0" text="Title" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                                <Label text="State" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
                                     <GridPane.margin>
                                         <Insets />
                                     </GridPane.margin>
                                 </Label>
-                                <Label text="State" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+                                <Label text="Total Chapters" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
                                     <GridPane.margin>
                                         <Insets />
                                     </GridPane.margin>
                                 </Label>
-                                <Label text="Total Chapters" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
+                                <Label text="Publish Date" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
                                     <GridPane.margin>
                                         <Insets />
                                     </GridPane.margin>
                                 </Label>
-                                <Label text="Publish Date" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
+                                <Label text="End Date" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
                                     <GridPane.margin>
                                         <Insets />
                                     </GridPane.margin>
                                 </Label>
-                                <Label text="End Date" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
+                                <Label text="All Read" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
                                     <GridPane.margin>
                                         <Insets />
                                     </GridPane.margin>
                                 </Label>
-                                <Label text="All Read" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="8">
-                                    <GridPane.margin>
-                                        <Insets />
-                                    </GridPane.margin>
-                                </Label>
-                                <Label text="Chapters" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="9">
+                                <Label text="Chapters" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="8">
                                     <GridPane.margin>
                                         <Insets />
                                     </GridPane.margin>
@@ -105,15 +101,14 @@
                                         <Insets />
                                     </GridPane.margin>
                                 </Label>
-                                <Label text="Manga Sample" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="17">
+                                <Label text="Manga Sample" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="18">
                                     <GridPane.margin>
                                         <Insets />
                                     </GridPane.margin>
                                 </Label>
-                                <ComboBox fx:id="cboListType" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-                                <TextField fx:id="tfTitle" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-                                <ComboBox fx:id="cboState" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="4" />
-                                <HBox alignment="CENTER_LEFT" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                                <TextField fx:id="tfTitle" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+                                <ComboBox fx:id="cboState" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                                <HBox alignment="CENTER_LEFT" GridPane.columnIndex="2" GridPane.rowIndex="4">
                                     <GridPane.margin>
                                         <Insets />
                                     </GridPane.margin>
@@ -121,15 +116,15 @@
                                         <TextField fx:id="tfTotalEpiChap" prefWidth="50.0" />
                                     </children>
                                 </HBox>
-                                <DatePicker fx:id="dpStartDate" prefWidth="120.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="6" />
-                                <DatePicker fx:id="dpEndDate" layoutX="135.0" layoutY="193.0" prefWidth="120.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="7" />
-                                <ComboBox fx:id="cboAllWatchedRead" layoutX="210.0" layoutY="133.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="8" />
-                                <ImageView fx:id="imgvEpiInfo" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="9">
+                                <DatePicker fx:id="dpStartDate" prefWidth="120.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="5" />
+                                <DatePicker fx:id="dpEndDate" layoutX="135.0" layoutY="193.0" prefWidth="120.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="6" />
+                                <ComboBox fx:id="cboAllWatchedRead" layoutX="210.0" layoutY="133.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="7" />
+                                <ImageView fx:id="imgvEpiInfo" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="8">
                                     <image>
                                         <Image url="@../../images/info.png" />
                                     </image>
                                 </ImageView>
-                                <HBox alignment="CENTER" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="9">
+                                <HBox alignment="CENTER" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="8">
                                     <children>
                                         <TextField fx:id="tfEpiChapStart" alignment="CENTER" prefWidth="80.0" promptText="Start" />
                                         <Separator prefWidth="20.0">
@@ -143,19 +138,19 @@
                                         <TextField fx:id="tfEpiChapEnd" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefWidth="80.0" promptText="End" />
                                     </children>
                                 </HBox>
-                        <HBox alignment="CENTER_LEFT" GridPane.columnIndex="2" GridPane.rowIndex="10">
+                        <HBox alignment="CENTER_LEFT" GridPane.columnIndex="2" GridPane.rowIndex="9">
                            <children>
                               <TextField fx:id="tfVolumes" prefWidth="50.0" />
                            </children>
                         </HBox>
-                                <TextArea fx:id="taSummary" prefHeight="200.0" prefWidth="200.0" promptText="Short Description..." GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="11" GridPane.rowSpan="6">
+                                <TextArea fx:id="taSummary" prefHeight="200.0" prefWidth="200.0" promptText="Short Description..." GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="11" GridPane.rowSpan="7">
                                     <GridPane.margin>
                                         <Insets bottom="5.0" />
                                     </GridPane.margin>
                                 </TextArea>
-                                <ListView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="17" GridPane.rowSpan="6" />
-                                <Separator layoutX="10.0" layoutY="40.0" prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="25" />
-                                <Button fx:id="btnScreenSampUpload" mnemonicParsing="false" onAction="#handleButtonAction" prefWidth="60.0" text="Upload" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="24" />
+                                <ListView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="18" GridPane.rowSpan="6" />
+                                <Separator layoutX="10.0" layoutY="40.0" prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="26" />
+                                <Button fx:id="btnScreenSampUpload" mnemonicParsing="false" onAction="#handleButtonAction" prefWidth="60.0" text="Upload" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="25" />
                                 <ImageView fx:id="imgvProfPic" fitHeight="145.0" fitWidth="242.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="4">
                                     <image>
                                         <Image url="@../../images/Thumbnail(NoImage).png" />
@@ -168,7 +163,7 @@
                                 </Label>
                                 <TextField fx:id="tfThumbnail" prefWidth="100.0" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="7" />
                                 <Button fx:id="btnThumbUpload" mnemonicParsing="false" onAction="#handleButtonAction" text="Upload" GridPane.columnIndex="8" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
-                                <ImageView fx:id="imgvScreenshotsInfo" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="17">
+                                <ImageView fx:id="imgvScreenshotsInfo" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="18">
                                     <image>
                                         <Image url="@../../images/info.png" />
                                     </image>
@@ -203,9 +198,11 @@
                                         </GridPane>
                                     </content>
                                 </TitledPane>
-                                <Button fx:id="btnClose" mnemonicParsing="false" onAction="#handleButtonAction" prefWidth="60.0" text="Close" GridPane.columnIndex="8" GridPane.rowIndex="24" />
-                                <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#handleButtonAction" prefWidth="60.0" text="Add" GridPane.columnIndex="7" GridPane.rowIndex="24" />
-                        <Label text="Volumes" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
+                                <Button fx:id="btnClose" mnemonicParsing="false" onAction="#handleButtonAction" prefWidth="60.0" text="Close" GridPane.columnIndex="8" GridPane.rowIndex="25" />
+                                <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#handleButtonAction" prefWidth="60.0" text="Add" GridPane.columnIndex="7" GridPane.rowIndex="25" />
+                        <Label text="Volumes" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="9" />
+                        <Label text="Author" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
+                        <TextField fx:id="tfAuthor" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="10" />
                             </children>
                         </GridPane>
                     </children>

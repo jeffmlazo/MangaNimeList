@@ -39,10 +39,10 @@ import static java.lang.Integer.parseInt;
  * @author jeprox
  */
 public class AddController implements Initializable {
-
+    
     private GenreModel genre = new GenreModel();
     private final MangaNimeModel manganime = new MangaNimeModel();
-
+    
     @FXML
     private GridPane gridPaneForm;
     @FXML
@@ -66,6 +66,8 @@ public class AddController implements Initializable {
     @FXML
     private TextField tfVolumes;
     @FXML
+    private TextField tfAuthor;
+    @FXML
     private ImageView imgvEpiChapInfo;
     @FXML
     private TextArea taSummary;
@@ -83,7 +85,7 @@ public class AddController implements Initializable {
     private Button btnAdd;
     @FXML
     private Button btnClose;
-
+    
     private StringProperty listTypeProp = new SimpleStringProperty();
 
     /**
@@ -106,9 +108,9 @@ public class AddController implements Initializable {
             int colIndex = 0;
             int rowIndex = 0;
             Iterator olGenre = genre.getAllGenre().iterator();
-
+            
             while (olGenre.hasNext()) {
-
+                
                 genre = (GenreModel) olGenre.next();
 
                 // Create checkbox with genre name
@@ -117,7 +119,7 @@ public class AddController implements Initializable {
                 cb.setId(genre.genreIdProp().getValue().toString());
                 // Set the class with checkbox-genre
                 cb.getStyleClass().add("checbox-genre");
-
+                
                 gridPaneGenre.add(cb, colIndex, rowIndex);
                 rowIndex++;
 
@@ -148,7 +150,7 @@ public class AddController implements Initializable {
             Logger.getLogger(AddController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException, SQLException {
 
@@ -164,22 +166,22 @@ public class AddController implements Initializable {
             String epiChapStart = tfEpiChapStart.getText().trim();
             String epiChapEnd = tfEpiChapEnd.getText().trim();
             String summary = taSummary.getText().trim();
-
+            
             LinkedHashMap<String, Object> mapObjCtrls = new LinkedHashMap<>();
             String keyTotalEpiChap = "Total Episodes";
             String keyStartDate = "Release Date";
             String keyAllWatchedRead = "All Watched";
             String keyEpiChapStart = "Episode Start";
             String keyEpiChapEnd = "Episode End";
-
+            
             if (listType.equals("manga")) {
-                keyTotalEpiChap = "Total Chapters ";
+                keyTotalEpiChap = "Total Chapters";
                 keyStartDate = "Publish Date";
                 keyAllWatchedRead = "All Read";
                 keyEpiChapStart = "Chapter Start";
                 keyEpiChapEnd = "Chapter End";
             }
-
+            
             mapObjCtrls.put("Title", title);
             mapObjCtrls.put("State", state);
             mapObjCtrls.put(keyTotalEpiChap, totalEpiChap);
@@ -188,11 +190,11 @@ public class AddController implements Initializable {
             mapObjCtrls.put(keyAllWatchedRead, allWatchedRead);
             mapObjCtrls.put(keyEpiChapStart, epiChapStart);
             mapObjCtrls.put(keyEpiChapEnd, epiChapEnd);
-
+            
             if (listType.equals("manga")) {
                 mapObjCtrls.put("Volumes", tfVolumes.getText().trim());
             }
-
+            
             ArrayList<String> errors = FormValidation.ValidateForm(mapObjCtrls);
             Iterator<String> iterator = errors.listIterator();
             StringBuilder strBuildErr = new StringBuilder();
@@ -200,7 +202,7 @@ public class AddController implements Initializable {
                 String error = iterator.next();
                 strBuildErr.append(error).append('\n');
             }
-
+            
             MsgBox msgBox = new MsgBox();
             // Check if no errors has been return means that all form fields have pass
             if (errors.isEmpty()) {
@@ -210,7 +212,7 @@ public class AddController implements Initializable {
                 } else {
                     allWatchedRead = "0";
                 }
-
+                
                 manganime.titleProp().setValue(title);
                 manganime.listTypeProp().setValue(listType);
                 manganime.epiChapStartProp().setValue(parseInt(epiChapStart));
@@ -221,11 +223,12 @@ public class AddController implements Initializable {
                 manganime.endDateProp().setValue(endDate.toString());
                 manganime.stateProp().setValue(state.toString());
                 manganime.summaryProp().setValue(summary);
-
+                
                 if (listType.equals("manga")) {
                     manganime.volumesProp().setValue(parseInt(tfVolumes.getText().trim()));
+                    manganime.authorProp().setValue(tfAuthor.getText().trim());
                 }
-
+                
                 if (manganime.insertMangaNime()) {
                     //TODO: Reload form to empty all fields and reload manganime list tables
                     ArrayList<String> success = new ArrayList<>();
@@ -253,5 +256,5 @@ public class AddController implements Initializable {
             System.out.println("Button Close Triggered");
         }
     }
-
+    
 }
