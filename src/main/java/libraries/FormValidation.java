@@ -24,6 +24,8 @@ public class FormValidation {
 
             if (mapObjCtrls.get(key) == null || mapObjCtrls.get(key).toString().isEmpty()) {
                 arrError.add(String.format("The %s is required.", key));
+            } else if (mapObjCtrls.get(key).equals(false)) {
+                arrError.add(String.format("The %s is required. Please choose at lease 1 %s.", key, key.toLowerCase()));
             }
         }
         return arrError;

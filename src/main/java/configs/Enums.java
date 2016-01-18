@@ -8,7 +8,8 @@ public class Enums {
 
     public enum MangaNimeState {
         ongoing("ongoing"),
-        completed("completed");
+        completed("completed"),
+        dropped("dropped");
         private String state;
 
         private MangaNimeState(String state) {

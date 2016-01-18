@@ -34,6 +34,7 @@ public class MangaNimeListMainController implements Initializable {
     private final MangaNimeModel manganime = new MangaNimeModel();
     private int animeNum;
     private int mangaNum;
+    private Stage stage;
 
     @FXML
     private Tab tabAnime;
@@ -172,6 +173,7 @@ public class MangaNimeListMainController implements Initializable {
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/main/resources/css/global.css").toExternalForm());
         stage.setScene(scene);
+        stage.initOwner(getMainStage());
         stage.setTitle(stageTitle);
         stage.show();
     }
@@ -252,6 +254,24 @@ public class MangaNimeListMainController implements Initializable {
             Logger.getLogger(MangaNimeListMainController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return numRows;
+    }
+
+    /**
+     * Set the primary stage.
+     *
+     * @param main the main window
+     */
+    public void setMainStage(Stage main) {
+        stage = main;
+    }
+
+    /**
+     * Get the primary stage.
+     *
+     * @return the primary stage
+     */
+    public Stage getMainStage() {
+        return stage;
     }
 
 }

@@ -561,6 +561,7 @@ public class MangaNimeModel {
 
             SqlUtil utilSql = new SqlUtil();
             String mangaNimeId = utilSql.getRandGenId("manganime", "manganime_id");
+            setMangaNimeId(mangaNimeId);
             String query = "INSERT INTO manganime (" + buildStrCols.toString() + ") VALUES (" + buildStrVals + ")";
             preparedStmt = conn.prepareStatement(query);
             ArrayList<Object> objVals = new ArrayList<>();

@@ -1,7 +1,6 @@
 package main.java.controllers;
 
 import java.io.IOException;
-import static java.lang.Integer.parseInt;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -20,7 +19,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -32,6 +30,12 @@ import main.java.libraries.FormValidation;
 import main.java.libraries.MsgBox;
 import main.java.models.MangaNimeModel;
 import static java.lang.Integer.parseInt;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
 /**
  * Add anime or manga controller
@@ -39,10 +43,10 @@ import static java.lang.Integer.parseInt;
  * @author jeprox
  */
 public class AddController implements Initializable {
-    
+
     private GenreModel genre = new GenreModel();
     private final MangaNimeModel manganime = new MangaNimeModel();
-    
+
     @FXML
     private GridPane gridPaneForm;
     @FXML
@@ -85,7 +89,7 @@ public class AddController implements Initializable {
     private Button btnAdd;
     @FXML
     private Button btnClose;
-    
+
     private StringProperty listTypeProp = new SimpleStringProperty();
 
     /**
@@ -108,9 +112,9 @@ public class AddController implements Initializable {
             int colIndex = 0;
             int rowIndex = 0;
             Iterator olGenre = genre.getAllGenre().iterator();
-            
+
             while (olGenre.hasNext()) {
-                
+
                 genre = (GenreModel) olGenre.next();
 
                 // Create checkbox with genre name
@@ -119,7 +123,7 @@ public class AddController implements Initializable {
                 cb.setId(genre.genreIdProp().getValue().toString());
                 // Set the class with checkbox-genre
                 cb.getStyleClass().add("checbox-genre");
-                
+
                 gridPaneGenre.add(cb, colIndex, rowIndex);
                 rowIndex++;
 
@@ -150,7 +154,7 @@ public class AddController implements Initializable {
             Logger.getLogger(AddController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException, SQLException {
 
@@ -166,14 +170,26 @@ public class AddController implements Initializable {
             String epiChapStart = tfEpiChapStart.getText().trim();
             String epiChapEnd = tfEpiChapEnd.getText().trim();
             String summary = taSummary.getText().trim();
-            
+
+            boolean isChckGenre = false;
+            ArrayList<Integer> arrGenres = new ArrayList<>();
+            ObservableList<Node> chckBoxes = gridPaneGenre.getChildren();
+            Iterator iteratorChckBoxes = chckBoxes.iterator();
+            while (iteratorChckBoxes.hasNext()) {
+                CheckBox chckBox = (CheckBox) iteratorChckBoxes.next();
+                if (chckBox.isSelected()) {
+                    arrGenres.add(parseInt(chckBox.getId()));
+                    isChckGenre = true;
+                }
+            }
+
             LinkedHashMap<String, Object> mapObjCtrls = new LinkedHashMap<>();
             String keyTotalEpiChap = "Total Episodes";
             String keyStartDate = "Release Date";
             String keyAllWatchedRead = "All Watched";
             String keyEpiChapStart = "Episode Start";
             String keyEpiChapEnd = "Episode End";
-            
+
             if (listType.equals("manga")) {
                 keyTotalEpiChap = "Total Chapters";
                 keyStartDate = "Publish Date";
@@ -181,7 +197,7 @@ public class AddController implements Initializable {
                 keyEpiChapStart = "Chapter Start";
                 keyEpiChapEnd = "Chapter End";
             }
-            
+
             mapObjCtrls.put("Title", title);
             mapObjCtrls.put("State", state);
             mapObjCtrls.put(keyTotalEpiChap, totalEpiChap);
@@ -190,11 +206,13 @@ public class AddController implements Initializable {
             mapObjCtrls.put(keyAllWatchedRead, allWatchedRead);
             mapObjCtrls.put(keyEpiChapStart, epiChapStart);
             mapObjCtrls.put(keyEpiChapEnd, epiChapEnd);
-            
+
             if (listType.equals("manga")) {
                 mapObjCtrls.put("Volumes", tfVolumes.getText().trim());
             }
-            
+
+            mapObjCtrls.put("Genre", isChckGenre);
+
             ArrayList<String> errors = FormValidation.ValidateForm(mapObjCtrls);
             Iterator<String> iterator = errors.listIterator();
             StringBuilder strBuildErr = new StringBuilder();
@@ -202,8 +220,7 @@ public class AddController implements Initializable {
                 String error = iterator.next();
                 strBuildErr.append(error).append('\n');
             }
-            
-            MsgBox msgBox = new MsgBox();
+
             // Check if no errors has been return means that all form fields have pass
             if (errors.isEmpty()) {
                 // Check if the value was yes or no then reassign the new value to 1 or 0 
@@ -212,7 +229,7 @@ public class AddController implements Initializable {
                 } else {
                     allWatchedRead = "0";
                 }
-                
+
                 manganime.titleProp().setValue(title);
                 manganime.listTypeProp().setValue(listType);
                 manganime.epiChapStartProp().setValue(parseInt(epiChapStart));
@@ -223,13 +240,13 @@ public class AddController implements Initializable {
                 manganime.endDateProp().setValue(endDate.toString());
                 manganime.stateProp().setValue(state.toString());
                 manganime.summaryProp().setValue(summary);
-                
+
                 if (listType.equals("manga")) {
                     manganime.volumesProp().setValue(parseInt(tfVolumes.getText().trim()));
                     manganime.authorProp().setValue(tfAuthor.getText().trim());
                 }
-                
-                if (manganime.insertMangaNime()) {
+
+                if (manganime.insertMangaNime() && genre.insertGenres(arrGenres, manganime.mangaNimeIdProp().getValue())) {
                     //TODO: Reload form to empty all fields and reload manganime list tables
                     ArrayList<String> success = new ArrayList<>();
                     String msgTitle = "Anime";
@@ -237,11 +254,11 @@ public class AddController implements Initializable {
                         msgTitle = "Manga";
                     }
                     success.add(msgTitle + " was successfully added!");
-                    msgBox.showModal(success, "success");
+                    MsgBox.showModal(success, "success");
                 }
             } else {
-//                gridPaneForm.getChildren().add(errorlbl);
-                msgBox.showModal(errors, "error");
+
+                MsgBox.showModal(errors, "error");
             }
         } else if (event.getSource() == btnScreenSampUpload) {
             //TODO: button screen samp event codes
@@ -249,12 +266,14 @@ public class AddController implements Initializable {
         } else if (event.getSource() == btnThumbUpload) {
             //TODO: button upload event codes
             System.out.println("Button Thumbnail Triggered");
-        } else if (event.getSource() == btnClose) {
-//            ObservableList test = gridPaneGenre.getChildren();
 
-            //TODO: button close event codes
-            System.out.println("Button Close Triggered");
+        } else if (event.getSource() == btnClose) {
+            // Get the scene using the button close to close the window
+            btnClose.getScene().getWindow().hide();
+//            Stage st = (Stage) btnClose.getScene().getWindow();
+//            Window owner = st.getOwner();
+//            System.out.println(owner.toString());
         }
     }
-    
+
 }
