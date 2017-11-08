@@ -1,4 +1,4 @@
-package main.java.models;
+package com.manganimelist.models;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -13,7 +13,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import main.java.configs.DbUtil;
+import com.manganimelist.configs.DbHandle;
 
 /**
  *
@@ -133,7 +133,7 @@ public class GenreModel {
     PreparedStatement preparedStmt = null;
 
     public GenreModel() {
-        conn = DbUtil.connector();
+        conn = DbHandle.connector();
         if (conn == null) {
             System.out.println("Database connection failed!");
             System.exit(1);

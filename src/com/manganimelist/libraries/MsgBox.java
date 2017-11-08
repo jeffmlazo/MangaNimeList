@@ -1,4 +1,4 @@
-package main.java.libraries;
+package com.manganimelist.libraries;
 
 import java.util.ArrayList;
 import java.util.ListIterator;

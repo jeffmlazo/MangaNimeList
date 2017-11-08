@@ -1,4 +1,4 @@
-package main.java.libraries;
+package com.manganimelist.libraries;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

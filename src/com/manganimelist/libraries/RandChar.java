@@ -1,4 +1,4 @@
-package main.java.libraries;
+package com.manganimelist.libraries;
 
 /**
  * Generate random character with range, lowercase, uppercase and digit

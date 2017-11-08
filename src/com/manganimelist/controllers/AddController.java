@@ -1,4 +1,4 @@
-package main.java.controllers;
+package com.manganimelist.controllers;
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,19 +23,18 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import main.java.models.GenreModel;
-import main.java.configs.Enums.MangaNimeIsWatchedRead;
-import main.java.configs.Enums.MangaNimeState;
-import main.java.libraries.FormValidation;
-import main.java.libraries.MsgBox;
-import main.java.models.MangaNimeModel;
-import static java.lang.Integer.parseInt;
+import com.manganimelist.models.GenreModel;
+import com.manganimelist.configs.Enums.MangaNimeIsWatchedRead;
+import com.manganimelist.configs.Enums.MangaNimeState;
+import com.manganimelist.libraries.FormUtil;
+import com.manganimelist.libraries.MsgBox;
+import com.manganimelist.models.MangaNimeModel;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import static java.lang.Integer.parseInt;
+import com.manganimelist.configs.DbHandle;
 
 /**
  * Add anime or manga controller
@@ -46,6 +45,7 @@ public class AddController implements Initializable {
 
     private GenreModel genre = new GenreModel();
     private final MangaNimeModel manganime = new MangaNimeModel();
+    private final DbHandle setUpTable = new DbHandle();
 
     @FXML
     private GridPane gridPaneForm;
@@ -107,7 +107,9 @@ public class AddController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-
+            
+            setUpTable.setUpGenre();
+            setUpTable.insertGenreValues();
             // Initialize for the column and row index in the gridpane
             int colIndex = 0;
             int rowIndex = 0;
@@ -213,7 +215,7 @@ public class AddController implements Initializable {
 
             mapObjCtrls.put("Genre", isChckGenre);
 
-            ArrayList<String> errors = FormValidation.ValidateForm(mapObjCtrls);
+            ArrayList<String> errors = FormUtil.validateForm(mapObjCtrls);
             Iterator<String> iterator = errors.listIterator();
             StringBuilder strBuildErr = new StringBuilder();
             while (iterator.hasNext()) {
@@ -272,7 +274,17 @@ public class AddController implements Initializable {
             btnClose.getScene().getWindow().hide();
 //            Stage st = (Stage) btnClose.getScene().getWindow();
 //            Window owner = st.getOwner();
+//            Node n = owner.getScene().getRoot();
+//            System.out.println(n);
+
 //            System.out.println(owner.toString());
+//            ObservableList<Stage> stages = StageHelper.getStages();
+//            Stage fS = stages.get(0);
+//            System.out.println(fS.getTitle());
+//
+//            ObservableList<Stage> stages2 = FXRobotHelper.getStages();
+//            Stage fs2 = stages2.get(0);
+//            System.out.println(fs2.titleProperty().getValue());
         }
     }
 

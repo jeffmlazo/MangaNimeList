@@ -1,10 +1,10 @@
-package main.java.libraries;
+package com.manganimelist.libraries;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import main.java.configs.DbUtil;
+import com.manganimelist.configs.DbHandle;
 
 /**
  *
@@ -17,7 +17,7 @@ public class SqlUtil {
     PreparedStatement preparedStmt = null;
 
     public SqlUtil() {
-        conn = DbUtil.connector();
+        conn = DbHandle.connector();
         if (conn == null) {
             System.out.println("Database connection failed!");
             System.exit(1);

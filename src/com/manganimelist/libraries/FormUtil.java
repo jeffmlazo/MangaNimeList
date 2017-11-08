@@ -1,21 +1,30 @@
-package main.java.libraries;
+package com.manganimelist.libraries;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Set;
+import javafx.collections.ObservableList;
+import javafx.scene.control.Control;
 
 /**
  *
  * @author jeprox
  */
-public class FormValidation {
+public class FormUtil {
 
-    public FormValidation() {
+    public FormUtil() {
 
     }
 
-    public static ArrayList<String> ValidateForm(LinkedHashMap<String, Object> mapObjCtrls) {
+    /**
+     * TODO: Need to improve this validation character, etc... Validate form if
+     * field values are pass.
+     *
+     * @param mapObjCtrls the key value pair of Field Name and its value control
+     * @return validation error(s) or null
+     */
+    public static ArrayList<String> validateForm(LinkedHashMap<String, Object> mapObjCtrls) {
         ArrayList<String> arrError = new ArrayList<>();
         Set<String> keys = mapObjCtrls.keySet();
         Iterator<String> iterator = keys.iterator();
@@ -29,5 +38,15 @@ public class FormValidation {
             }
         }
         return arrError;
+    }
+
+    /**
+     * Clear the form fields to an empty values.
+     *
+     * @param fieldCtrls the field control types such as Textfield, ComboBox,
+     * CheckBox etc..
+     */
+    public static void clearForm(ArrayList<Control> fieldCtrls) {
+        
     }
 }

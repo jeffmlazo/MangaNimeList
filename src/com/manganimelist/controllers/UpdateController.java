@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.controllers;
+package com.manganimelist.controllers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -14,7 +14,7 @@ import javafx.fxml.Initializable;
  *
  * @author jeprox
  */
-public class ViewController implements Initializable {
+public class UpdateController implements Initializable {
 
     /**
      * Initializes the controller class.

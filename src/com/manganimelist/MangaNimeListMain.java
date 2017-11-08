@@ -1,11 +1,11 @@
-package main.java;
+package com.manganimelist;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import main.java.controllers.MangaNimeListMainController;
+import com.manganimelist.controllers.MangaNimeListMainController;
 
 /**
  *
@@ -22,13 +22,13 @@ public class MangaNimeListMain extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/resources/views/MangaNimeListMain.fxml"));
-        MangaNimeListMainController manganimeCtrl = new MangaNimeListMainController();
-        manganimeCtrl.setMainStage(stage);
-        loader.setController(manganimeCtrl);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/views/MangaNimeListMain.fxml"));
+        MangaNimeListMainController manganimeCtrllr = new MangaNimeListMainController();
+        manganimeCtrllr.setMainStage(stage);
         Parent root = (Parent) loader.load();
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("/main/resources/css/global.css").toExternalForm());
+        
+        scene.getStylesheets().add(getClass().getResource("/resources/css/global.css").toExternalForm());
         stage.setScene(scene);
         stage.setTitle("MangaNimeList");
         stage.show();

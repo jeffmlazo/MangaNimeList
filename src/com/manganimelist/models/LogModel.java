@@ -1,4 +1,4 @@
-package main.java.models;
+package com.manganimelist.models;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -13,8 +13,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import main.java.configs.DbUtil;
-import main.java.libraries.SqlUtil;
+import com.manganimelist.configs.DbHandle;
+import com.manganimelist.libraries.SqlUtil;
 
 /**
  *
@@ -330,7 +330,7 @@ public class LogModel {
      * connection fails the system will close.
      */
     public LogModel() {
-        conn = DbUtil.connector();
+        conn = DbHandle.connector();
         if (conn == null) {
             System.out.println("Database connection failed!");
             System.exit(1);

@@ -1,4 +1,4 @@
-package main.java.configs;
+package com.manganimelist.configs;
 
 /**
  *

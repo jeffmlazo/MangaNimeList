@@ -1,4 +1,4 @@
-package main.java.models;
+package com.manganimelist.models;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -12,9 +12,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import main.java.configs.DbUtil;
-import main.java.libraries.DateTimeFormatter;
-import main.java.libraries.SqlUtil;
+import com.manganimelist.configs.DbHandle;
+import com.manganimelist.libraries.DateTimeFormatter;
+import com.manganimelist.libraries.SqlUtil;
 
 /**
  *
@@ -490,7 +490,7 @@ public class MangaNimeModel {
      * connection fails the system will close.
      */
     public MangaNimeModel() {
-        conn = DbUtil.connector();
+        conn = DbHandle.connector();
         if (conn == null) {
             System.out.println("Database connection failed!");
             System.exit(1);

@@ -1,8 +1,9 @@
-package main.java.controllers;
+package com.manganimelist.controllers;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,7 +23,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import main.java.models.MangaNimeModel;
+import com.manganimelist.libraries.MsgBox;
+import com.manganimelist.models.MangaNimeModel;
+import com.manganimelist.configs.DbHandle;
 
 /**
  * MangaNimeList main page loader
@@ -32,6 +35,7 @@ import main.java.models.MangaNimeModel;
 public class MangaNimeListMainController implements Initializable {
 
     private final MangaNimeModel manganime = new MangaNimeModel();
+    private final DbHandle setUpTable = new DbHandle();
     private int animeNum;
     private int mangaNum;
     private Stage stage;
@@ -106,12 +110,16 @@ public class MangaNimeListMainController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         if (manganime.isDbConnected()) {
+            // Create tables in the database
+            setUpTable.setUpManganime();
+            setUpTable.setUpLog();
+
+            // Call createMangaNimeTbl() & store the number of results in the variables
             animeNum = createMangaNimeTbl("anime");
             mangaNum = createMangaNimeTbl("manga");
             // Lets just set the number of Anime numrow since it is the first tab that will be shown in the table view
             lblTblEntries.setText("Showing " + animeNum + " entries");
         }
-
     }
 
     /**
@@ -135,11 +143,11 @@ public class MangaNimeListMainController implements Initializable {
             // Check if what tab is actively selected
             if (tabAnime.isSelected()) {
                 stageTitle = "Add Anime";
-                loader.setLocation(getClass().getResource("/main/resources/views/anime/AddAnimeModal.fxml"));
+                loader.setLocation(getClass().getResource("/resources/views/anime/AddAnimeModal.fxml"));
 
             } else {
                 stageTitle = "Add Manga";
-                loader.setLocation(getClass().getResource("/main/resources/views/manga/AddMangaModal.fxml"));
+                loader.setLocation(getClass().getResource("/resources/views/manga/AddMangaModal.fxml"));
             }
 
             AddController controller = new AddController();
@@ -150,19 +158,19 @@ public class MangaNimeListMainController implements Initializable {
             // Check if what tab is actively selected
             if (tabAnime.isSelected()) {
                 stageTitle = "View Anime";
-                loader.setLocation(getClass().getResource("/main/resources/views/anime/ViewAnimeModal.fxml"));
+                loader.setLocation(getClass().getResource("/resources/views/anime/ViewAnimeModal.fxml"));
             } else {
                 stageTitle = "View Manga";
-                loader.setLocation(getClass().getResource("/main/resources/views/manga/ViewMangaModal.fxml"));
+                loader.setLocation(getClass().getResource("/resources/views/manga/ViewMangaModal.fxml"));
             }
         } else if (event.getSource() == tbrBtnUpdate) {
             // Check if what tab is actively selected
             if (tabAnime.isSelected()) {
                 stageTitle = "Update Anime";
-                loader.setLocation(getClass().getResource("/main/resources/views/anime/UpdateAnimeModal.fxml"));
+                loader.setLocation(getClass().getResource("/resources/views/anime/UpdateAnimeModal.fxml"));
             } else {
                 stageTitle = "UpdateManga";
-                loader.setLocation(getClass().getResource("/main/resources/views/manga/UpdateMangaModal.fxml"));
+                loader.setLocation(getClass().getResource("/resources/views/manga/UpdateMangaModal.fxml"));
             }
         } else if (event.getSource() == tbrBtnDelete) {
             System.out.println("Delete Button Triggered");
@@ -171,9 +179,10 @@ public class MangaNimeListMainController implements Initializable {
         //create a new scene with root and set the stage
         Parent root = (Parent) loader.load();
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("/main/resources/css/global.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/resources/css/global.css").toExternalForm());
         stage.setScene(scene);
         stage.initOwner(getMainStage());
+        stage.setAlwaysOnTop(true);
         stage.setTitle(stageTitle);
         stage.show();
     }
