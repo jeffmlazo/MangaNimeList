@@ -13,7 +13,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import com.manganimelist.configs.DbHandle;
+import com.manganimelist.configs.DbHandler;
 import com.manganimelist.libraries.SqlUtil;
 
 /**
@@ -330,7 +330,7 @@ public class LogModel {
      * connection fails the system will close.
      */
     public LogModel() {
-        conn = DbHandle.connector();
+        conn = DbHandler.connector();
         if (conn == null) {
             System.out.println("Database connection failed!");
             System.exit(1);

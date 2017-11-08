@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import com.manganimelist.configs.DbHandle;
+import com.manganimelist.configs.DbHandler;
 
 /**
  *
@@ -17,7 +17,7 @@ public class SqlUtil {
     PreparedStatement preparedStmt = null;
 
     public SqlUtil() {
-        conn = DbHandle.connector();
+        conn = DbHandler.connector();
         if (conn == null) {
             System.out.println("Database connection failed!");
             System.exit(1);

@@ -22,6 +22,7 @@ public class MangaNimeListMain extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        // TODO: Need to refactor setting redundant controller here
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/views/MangaNimeListMain.fxml"));
         MangaNimeListMainController manganimeCtrllr = new MangaNimeListMainController();
         manganimeCtrllr.setMainStage(stage);

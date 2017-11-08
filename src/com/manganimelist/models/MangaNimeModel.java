@@ -12,7 +12,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import com.manganimelist.configs.DbHandle;
+import com.manganimelist.configs.DbHandler;
 import com.manganimelist.libraries.DateTimeFormatter;
 import com.manganimelist.libraries.SqlUtil;
 
@@ -490,7 +490,7 @@ public class MangaNimeModel {
      * connection fails the system will close.
      */
     public MangaNimeModel() {
-        conn = DbHandle.connector();
+        conn = DbHandler.connector();
         if (conn == null) {
             System.out.println("Database connection failed!");
             System.exit(1);
@@ -642,7 +642,7 @@ public class MangaNimeModel {
                 + "LEFT JOIN log "
                 + "ON log.manganime_id = manganime.manganime_id "
                 + "WHERE list_type = ? "
-                + "AND log.action = ?"
+                + "AND log.action = ? "
                 + "ORDER BY title ASC";
         // preparedStmt is already autocloseable so no need to add in the finally block
         try {

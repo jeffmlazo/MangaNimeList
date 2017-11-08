@@ -13,7 +13,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import com.manganimelist.configs.DbHandle;
+import com.manganimelist.configs.DbHandler;
 
 /**
  *
@@ -133,7 +133,7 @@ public class GenreModel {
     PreparedStatement preparedStmt = null;
 
     public GenreModel() {
-        conn = DbHandle.connector();
+        conn = DbHandler.connector();
         if (conn == null) {
             System.out.println("Database connection failed!");
             System.exit(1);

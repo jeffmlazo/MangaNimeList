@@ -34,7 +34,7 @@ import javafx.scene.Node;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import static java.lang.Integer.parseInt;
-import com.manganimelist.configs.DbHandle;
+import com.manganimelist.configs.DbHandler;
 
 /**
  * Add anime or manga controller
@@ -45,7 +45,7 @@ public class AddController implements Initializable {
 
     private GenreModel genre = new GenreModel();
     private final MangaNimeModel manganime = new MangaNimeModel();
-    private final DbHandle setUpTable = new DbHandle();
+    private final DbHandler setUpTable = new DbHandler();
 
     @FXML
     private GridPane gridPaneForm;
@@ -107,9 +107,11 @@ public class AddController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            
+
+            // Setup table with column and values for genre
             setUpTable.setUpGenre();
             setUpTable.insertGenreValues();
+            
             // Initialize for the column and row index in the gridpane
             int colIndex = 0;
             int rowIndex = 0;

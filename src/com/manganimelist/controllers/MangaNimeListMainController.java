@@ -25,7 +25,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import com.manganimelist.libraries.MsgBox;
 import com.manganimelist.models.MangaNimeModel;
-import com.manganimelist.configs.DbHandle;
+import com.manganimelist.configs.DbHandler;
 
 /**
  * MangaNimeList main page loader
@@ -35,7 +35,7 @@ import com.manganimelist.configs.DbHandle;
 public class MangaNimeListMainController implements Initializable {
 
     private final MangaNimeModel manganime = new MangaNimeModel();
-    private final DbHandle setUpTable = new DbHandle();
+    private final DbHandler setUpTable = new DbHandler();
     private int animeNum;
     private int mangaNum;
     private Stage stage;
