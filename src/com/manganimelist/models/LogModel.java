@@ -239,7 +239,7 @@ public class LogModel {
     /**
      * Set the image id.
      *
-     * @param imageId the image
+     * @param imageId the image id
      */
     public void setImageId(String imageId) {
         imageIdProp().set(imageId);

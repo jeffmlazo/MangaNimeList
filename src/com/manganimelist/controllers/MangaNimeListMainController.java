@@ -112,6 +112,9 @@ public class MangaNimeListMainController implements Initializable {
         if (manganime.isDbConnected()) {
             // Create tables in the database
             setUpTable.setUpManganime();
+            setUpTable.setUpGenre();
+            setUpTable.setUpGenres();
+            setUpTable.setUpImages();
             setUpTable.setUpLog();
 
             // Call createMangaNimeTbl() & store the number of results in the variables

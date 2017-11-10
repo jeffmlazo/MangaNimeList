@@ -2,11 +2,9 @@ package com.manganimelist.configs;
 
 import java.io.File;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -61,7 +59,6 @@ public class DbHandler {
         }
     }
 
-    // TODO: Need to fix here the creation of table
     public void setUpManganime() {
         String sql = "CREATE TABLE IF NOT EXISTS manganime (\n"
                 + "manganime_id     CHAR(22) PRIMARY KEY NOT NULL,\n"
@@ -106,11 +103,40 @@ public class DbHandler {
     }
 
     public void setUpGenres() {
-        // TODO: Need to create table for genres
+        String sql = "CREATE TABLE IF NOT EXISTS genres (\n"
+                + "genres_id               INTEGER PRIMARY KEY AUTOINCREMENT,\n"
+                + "genre_id                 INTEGER,\n"
+                + "manganime_id      CHAR(22)\n"
+                + ");";
+
+        try {
+            preparedStmt = conn.prepareStatement(sql);
+            preparedStmt.executeUpdate();
+            preparedStmt.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DbHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void setUpImages() {
-        // TODO: Need to create table for images
+        String sql = "CREATE TABLE IF NOT EXISTS image (\n"
+                + "image_id                           CHAR(22) PRIMARY KEY,\n"
+                + "image_category               VARCHAR   DEFAULT thumbnail,\n"
+                + "image_file_name              VARCHAR,\n"
+                + "image_file_type                CHAR,\n"
+                + "image_file_extension       CHAR,\n"
+                + "manganime_id                 CHAR(22)\n"
+                + ");";
+
+        try {
+            preparedStmt = conn.prepareStatement(sql);
+            preparedStmt.executeUpdate();
+            preparedStmt.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DbHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void setUpLog() {
@@ -206,7 +232,7 @@ public class DbHandler {
                 preparedStmt = conn.prepareStatement(sql);
 
                 int paramIndex = 1;
-                // Re assign again the iterator to new iterator to reset the 
+                // Re assign again the iterator to new iterator to reset the colVals
                 ListIterator<String> iteratorColVals2 = colVals.listIterator();
                 while (iteratorColVals2.hasNext()) {
                     String colVal = iteratorColVals2.next();

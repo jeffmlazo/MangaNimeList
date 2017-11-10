@@ -1,3 +1,4 @@
+/*Element classes*/
 /* Remove blue focus color in a scroll pane control*/
 .scroll-pane{
     -fx-background-color: transparent; 
@@ -9,3 +10,14 @@
     /*-fx-faint-focus-color: transparent;*/
     -fx-pref-width: 120px;
 }
+
+.table-cell{
+    -fx-alignment: CENTER;
+}
+
+/*Custom classes*/
+.center-wrap-text{
+    -fx-text-alignment: CENTER;
+    -fx-wrap-text: true;
+}
+
