@@ -1,0 +1,5 @@
+# Ignore netbeans
+nbproject
+build
+dist
+manifest.mf
