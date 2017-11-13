@@ -35,6 +35,10 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import static java.lang.Integer.parseInt;
 import com.manganimelist.configs.DbHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.TableView;
 
 /**
  * Add anime or manga controller
@@ -111,7 +115,7 @@ public class AddController implements Initializable {
             // Setup table with column and values for genre
             setUpTable.setUpGenre();
             setUpTable.insertGenreValues();
-            
+
             // Initialize for the column and row index in the gridpane
             int colIndex = 0;
             int rowIndex = 0;
@@ -139,14 +143,12 @@ public class AddController implements Initializable {
             }
 
             // Set State values
-            cboState.setPromptText("State");
             MangaNimeState[] enumsState = MangaNimeState.values();
-            for (MangaNimeState state : enumsState) {
-                cboState.getItems().add(state.getMangaNimeState());
+            for (MangaNimeState enumState : enumsState) {
+                cboState.getItems().add(enumState.getMangaNimeState());
             }
 
-            // Set AllWatchedRead values
-            cboAllWatchedRead.setPromptText("All Watched");
+            // Set AllWatchedRead values            
             MangaNimeIsWatchedRead[] enumsWatchedRead = MangaNimeIsWatchedRead.values();
             for (MangaNimeIsWatchedRead isWatchedRead : enumsWatchedRead) {
                 cboAllWatchedRead.getItems().add(isWatchedRead.getWatchedRead());
@@ -177,10 +179,13 @@ public class AddController implements Initializable {
 
             boolean isChckGenre = false;
             ArrayList<Integer> arrGenres = new ArrayList<>();
-            ObservableList<Node> chckBoxes = gridPaneGenre.getChildren();
-            Iterator iteratorChckBoxes = chckBoxes.iterator();
+            ObservableList<Node> chckBoxes;
+            Iterator iteratorChckBoxes;
+            CheckBox chckBox;
+            chckBoxes = gridPaneGenre.getChildren();
+            iteratorChckBoxes = chckBoxes.iterator();
             while (iteratorChckBoxes.hasNext()) {
-                CheckBox chckBox = (CheckBox) iteratorChckBoxes.next();
+                chckBox = (CheckBox) iteratorChckBoxes.next();
                 if (chckBox.isSelected()) {
                     arrGenres.add(parseInt(chckBox.getId()));
                     isChckGenre = true;
@@ -251,17 +256,40 @@ public class AddController implements Initializable {
                 }
 
                 if (manganime.insertMangaNime() && genre.insertGenres(arrGenres, manganime.mangaNimeIdProp().getValue())) {
-                    //TODO: Reload form to empty all fields and reload manganime list tables
+                    //TODO: Reload manganime list tables after successfully added
                     ArrayList<String> success = new ArrayList<>();
                     String msgTitle = "Anime";
+                    // Common control fields to be cleared after adding Anime or Manga
+                    tfTitle.clear();
+                    // Reset the State combobox with the prompText
+                    cboState.getSelectionModel().clearSelection();
+                    tfTotalEpiChap.clear();
+                    dpStartDate.getEditor().clear();
+                    dpEndDate.getEditor().clear();
+                    // Reset the All Wached Read combobox with the prompText
+                    cboAllWatchedRead.getSelectionModel().clearSelection();
+                    tfEpiChapStart.setText("1");
+                    tfEpiChapEnd.clear();
+                    taSummary.clear();
+
+                    // Get all checkboxes & uncheck them
+                    chckBoxes = gridPaneGenre.getChildren();
+                    iteratorChckBoxes = chckBoxes.iterator();
+                    while (iteratorChckBoxes.hasNext()) {
+                        chckBox = (CheckBox) iteratorChckBoxes.next();
+                        chckBox.setSelected(false);
+                    }
+
                     if (listType.equals("manga")) {
                         msgTitle = "Manga";
+                        tfVolumes.clear();
+                        tfAuthor.clear();
                     }
+
                     success.add(msgTitle + " was successfully added!");
                     MsgBox.showModal(success, "success");
                 }
             } else {
-
                 MsgBox.showModal(errors, "error");
             }
         } else if (event.getSource() == btnScreenSampUpload) {
@@ -274,19 +302,21 @@ public class AddController implements Initializable {
         } else if (event.getSource() == btnClose) {
             // Get the scene using the button close to close the window
             btnClose.getScene().getWindow().hide();
+            
+            // TODO: Find a way to get the parents elelement
+            
 //            Stage st = (Stage) btnClose.getScene().getWindow();
-//            Window owner = st.getOwner();
-//            Node n = owner.getScene().getRoot();
-//            System.out.println(n);
-
-//            System.out.println(owner.toString());
-//            ObservableList<Stage> stages = StageHelper.getStages();
-//            Stage fS = stages.get(0);
-//            System.out.println(fS.getTitle());
-//
-//            ObservableList<Stage> stages2 = FXRobotHelper.getStages();
-//            Stage fs2 = stages2.get(0);
-//            System.out.println(fs2.titleProperty().getValue());
+            //            Window owner = st.getOwner();
+            //            Node n = owner.getScene().getRoot();
+            //            System.out.println(n);
+            //            System.out.println(owner.toString());
+            //            ObservableList<Stage> stages = StageHelper.getStages();
+            //            Stage fS = stages.get(0);
+            //            System.out.println(fS.getTitle());
+            //
+            //            ObservableList<Stage> stages2 = FXRobotHelper.getStages();
+            //            Stage fs2 = stages2.get(0);
+            //            System.out.println(fs2.titleProperty().getValue());
         }
     }
 

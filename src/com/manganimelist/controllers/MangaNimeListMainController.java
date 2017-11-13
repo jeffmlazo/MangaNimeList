@@ -133,7 +133,7 @@ public class MangaNimeListMainController implements Initializable {
      */
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException {
-        Stage stage = new Stage();
+        Stage handleStage = new Stage();
         FXMLLoader loader = new FXMLLoader();
         String stageTitle = "";
 
@@ -183,11 +183,11 @@ public class MangaNimeListMainController implements Initializable {
         Parent root = (Parent) loader.load();
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/resources/css/global.css").toExternalForm());
-        stage.setScene(scene);
-        stage.initOwner(getMainStage());
-        stage.setAlwaysOnTop(true);
-        stage.setTitle(stageTitle);
-        stage.show();
+        handleStage.setScene(scene);
+        handleStage.initOwner(getMainStage());
+        handleStage.setAlwaysOnTop(true);
+        handleStage.setTitle(stageTitle);
+        handleStage.show();
     }
 
     /**
