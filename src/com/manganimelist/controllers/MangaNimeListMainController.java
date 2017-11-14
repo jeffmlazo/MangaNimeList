@@ -26,6 +26,9 @@ import javafx.stage.Stage;
 import com.manganimelist.libraries.MsgBox;
 import com.manganimelist.models.MangaNimeModel;
 import com.manganimelist.configs.DbHandler;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.stage.Modality;
 
 /**
  * MangaNimeList main page loader
@@ -38,68 +41,33 @@ public class MangaNimeListMainController implements Initializable {
     private final DbHandler setUpTable = new DbHandler();
     private int animeNum;
     private int mangaNum;
-    private Stage stage;
 
     @FXML
     private Tab tabAnime;
     @FXML
     private TextField tfSearch;
     @FXML
-    private Button tbrBtnAdd;
-    @FXML
-    private Button tbrBtnView;
-    @FXML
-    private Button tbrBtnUpdate;
-    @FXML
-    private Button tbrBtnDelete;
+    private Button tbrBtnAdd, tbrBtnView, tbrBtnUpdate, tbrBtnDelete;
     @FXML
     private TableView<MangaNimeModel> tblViewAnime;
     @FXML
-    private TableColumn<MangaNimeModel, String> colAniId;
+    private TableColumn<MangaNimeModel, String> colAniId, colAniTitle, colAniAllWatched,
+            colAniReleaseDate, colAniEndDate, colAniState;
     @FXML
-    private TableColumn<MangaNimeModel, String> colAniTitle;
-    @FXML
-    private TableColumn<MangaNimeModel, Integer> colAniEpiStart;
-    @FXML
-    private TableColumn<MangaNimeModel, Integer> colAniEpiEnd;
-    @FXML
-    private TableColumn<MangaNimeModel, Integer> colAniEpiTotal;
-    @FXML
-    private TableColumn<MangaNimeModel, String> colAniAllWatched;
-    @FXML
-    private TableColumn<MangaNimeModel, String> colAniReleaseDate;
-    @FXML
-    private TableColumn<MangaNimeModel, String> colAniEndDate;
-    @FXML
-    private TableColumn<MangaNimeModel, String> colAniState;
+    private TableColumn<MangaNimeModel, Integer> colAniEpiStart, colAniEpiEnd, colAniEpiTotal;
     @FXML
     private TableColumn<MangaNimeModel, Object> colAniCreatedOn;
     @FXML
     private TableView<MangaNimeModel> tblViewManga;
     @FXML
-    private TableColumn<MangaNimeModel, String> colMangaId;
+    private TableColumn<MangaNimeModel, String> colMangaId, colMangaTitle, colMangaAllRead, colMangaPublishDate,
+            colMangaEndDate, colMangaAuthor, colMangaState;
     @FXML
-    private TableColumn<MangaNimeModel, String> colMangaTitle;
+    private TableColumn<MangaNimeModel, Integer> colMangaChapStart, colMangaChapEnd, colMangaChapTotal,
+            colMangaVolumes;
     @FXML
-    private TableColumn<MangaNimeModel, Integer> colMangaChapStart;
-    @FXML
-    private TableColumn<MangaNimeModel, Integer> colMangaChapEnd;
-    @FXML
-    private TableColumn<MangaNimeModel, Integer> colMangaChapTotal;
-    @FXML
-    private TableColumn<MangaNimeModel, Integer> colMangaVolumes;
-    @FXML
-    private TableColumn<MangaNimeModel, String> colMangaAllRead;
-    @FXML
-    private TableColumn<MangaNimeModel, String> colMangaPublishDate;
-    @FXML
-    private TableColumn<MangaNimeModel, String> colMangaEndDate;
-    @FXML
-    private TableColumn<MangaNimeModel, String> colMangaAuthor;
-    @FXML
-    private TableColumn<MangaNimeModel, String> colMangaState;
-    @FXML
-    private TableColumn<MangaNimeModel, String> colMangaCreatedOn;
+    private TableColumn<MangaNimeModel, Object> colMangaCreatedOn;
+
     @FXML
     private Label lblTblEntries;
 
@@ -133,7 +101,7 @@ public class MangaNimeListMainController implements Initializable {
      */
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException {
-        Stage handleStage = new Stage();
+        Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader();
         String stageTitle = "";
 
@@ -172,22 +140,24 @@ public class MangaNimeListMainController implements Initializable {
                 stageTitle = "Update Anime";
                 loader.setLocation(getClass().getResource("/resources/views/anime/UpdateAnimeModal.fxml"));
             } else {
-                stageTitle = "UpdateManga";
+                stageTitle = "Update Manga";
                 loader.setLocation(getClass().getResource("/resources/views/manga/UpdateMangaModal.fxml"));
             }
         } else if (event.getSource() == tbrBtnDelete) {
             System.out.println("Delete Button Triggered");
         }
 
+        // FIX: Need to fix the centering the modal after the parent element was minimize
         //create a new scene with root and set the stage
         Parent root = (Parent) loader.load();
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/resources/css/global.css").toExternalForm());
-        handleStage.setScene(scene);
-        handleStage.initOwner(getMainStage());
-        handleStage.setAlwaysOnTop(true);
-        handleStage.setTitle(stageTitle);
-        handleStage.show();
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL); // Restrict duplicate window to be shown
+        stage.initOwner(tbrBtnAdd.getScene().getWindow()); // Need to get the tbrBtnAdd parent window to be set as owner
+        stage.setTitle(stageTitle);
+        stage.showAndWait();
+
     }
 
     /**
@@ -267,23 +237,4 @@ public class MangaNimeListMainController implements Initializable {
         }
         return numRows;
     }
-
-    /**
-     * Set the primary stage.
-     *
-     * @param main the main window
-     */
-    public void setMainStage(Stage main) {
-        stage = main;
-    }
-
-    /**
-     * Get the primary stage.
-     *
-     * @return the primary stage
-     */
-    public Stage getMainStage() {
-        return stage;
-    }
-
 }

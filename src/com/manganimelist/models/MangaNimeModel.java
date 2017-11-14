@@ -644,7 +644,7 @@ public class MangaNimeModel {
                 + "WHERE list_type = ? "
                 + "AND log.action = ? "
                 + "ORDER BY title ASC";
-        // preparedStmt is already autocloseable so no need to add in the finally block
+
         try {
             preparedStmt = conn.prepareStatement(query, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             preparedStmt.setString(1, listType);
@@ -670,8 +670,8 @@ public class MangaNimeModel {
                 }
 
                 mangaNimeData.setAllWatchedRead(isAllWacthedRead);
-                mangaNimeData.setStartDate(rs.getString("start_date"));
-                mangaNimeData.setEndDate(rs.getString("end_date"));
+                mangaNimeData.setStartDate(DateTimeFormatter.formatDate(rs.getString("start_date")));
+                mangaNimeData.setEndDate(DateTimeFormatter.formatDate(rs.getString("end_date")));
                 mangaNimeData.setState(rs.getString("state"));
                 mangaNimeData.setCreatedOn(DateTimeFormatter.formatDateTime(rs.getLong("created_on")));
                 data.add(mangaNimeData);
