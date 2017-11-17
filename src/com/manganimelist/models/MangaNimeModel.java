@@ -642,8 +642,7 @@ public class MangaNimeModel {
                 + "LEFT JOIN log "
                 + "ON log.manganime_id = manganime.manganime_id "
                 + "WHERE list_type = ? "
-                + "AND log.action = ? "
-                + "ORDER BY title ASC";
+                + "AND log.action = ?";
 
         try {
             preparedStmt = conn.prepareStatement(query, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);

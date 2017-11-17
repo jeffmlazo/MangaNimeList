@@ -3,7 +3,6 @@ package com.manganimelist.controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,11 +22,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import com.manganimelist.libraries.MsgBox;
 import com.manganimelist.models.MangaNimeModel;
 import com.manganimelist.configs.DbHandler;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 
 /**
@@ -39,8 +37,8 @@ public class MangaNimeListMainController implements Initializable {
 
     private final MangaNimeModel manganime = new MangaNimeModel();
     private final DbHandler setUpTable = new DbHandler();
-    private int animeNum;
-    private int mangaNum;
+    private ObservableList<Object> olAnime = FXCollections.observableArrayList();
+    private ObservableList<Object> olManga = FXCollections.observableArrayList();
 
     @FXML
     private Tab tabAnime;
@@ -67,9 +65,10 @@ public class MangaNimeListMainController implements Initializable {
             colMangaVolumes;
     @FXML
     private TableColumn<MangaNimeModel, Object> colMangaCreatedOn;
-
     @FXML
     private Label lblTblEntries;
+    @FXML
+    private AnchorPane rootPane;
 
     /**
      * Initializes the controller class.
@@ -85,11 +84,23 @@ public class MangaNimeListMainController implements Initializable {
             setUpTable.setUpImages();
             setUpTable.setUpLog();
 
-            // Call createMangaNimeTbl() & store the number of results in the variables
-            animeNum = createMangaNimeTbl("anime");
-            mangaNum = createMangaNimeTbl("manga");
+            // Set create cell value factories for anime & manga
+            createCellValueFactories("anime");
+            createCellValueFactories("manga");
+
+            // Set table items for anime & manga
+            olAnime = createTableItems("anime");
+            olManga = createTableItems("manga");
+
+            /*
+             Add sort order column for anime & manga after loading the table
+             items. It requires to set a sortType="DESCENDING" in the fxml.
+             */
+            tblViewAnime.getSortOrder().add(colAniCreatedOn);
+            tblViewManga.getSortOrder().add(colMangaCreatedOn);
+
             // Lets just set the number of Anime numrow since it is the first tab that will be shown in the table view
-            lblTblEntries.setText("Showing " + animeNum + " entries");
+            lblTblEntries.setText("Showing " + olAnime.size() + " entries");
         }
     }
 
@@ -144,97 +155,134 @@ public class MangaNimeListMainController implements Initializable {
                 loader.setLocation(getClass().getResource("/resources/views/manga/UpdateMangaModal.fxml"));
             }
         } else if (event.getSource() == tbrBtnDelete) {
-            System.out.println("Delete Button Triggered");
+
+            // FIXME: Need to implement this adding new row after saving anime or manga details
+            MangaNimeModel mangaNimeData = new MangaNimeModel();
+            mangaNimeData.setMangaNimeId("089as0d808sd0a8s");
+            mangaNimeData.setTitle("Dummy Title");
+            mangaNimeData.setEpiChapStart(2);
+            mangaNimeData.setEpiChapEnd(122);
+            mangaNimeData.setTotalEpiChap(100);
+            mangaNimeData.setAllWatchedRead("yes");
+            mangaNimeData.setStartDate("12/01/2013");
+            mangaNimeData.setEndDate("12/23/2014");
+            mangaNimeData.setState("completed");
+            mangaNimeData.setCreatedOn("12/22/2017 12:00 AM");
+            olAnime.add(mangaNimeData);
+
+            lblTblEntries.setText("Showing " + olAnime.size() + " entries");
+            tblViewAnime.sort(); // Sort again the table after adding new data
+
+//            System.out.println("Delete Button Triggered");
+//            tblViewAnime.setItems(null); // This code works for clearing the tblView in anime
+//            olMangaNime.clear();
         }
 
-        // FIX: Need to fix the centering the modal after the parent element was minimize
-        //create a new scene with root and set the stage
-        Parent root = (Parent) loader.load();
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("/resources/css/global.css").toExternalForm());
-        stage.setScene(scene);
-        stage.initModality(Modality.APPLICATION_MODAL); // Restrict duplicate window to be shown
-        stage.initOwner(tbrBtnAdd.getScene().getWindow()); // Need to get the tbrBtnAdd parent window to be set as owner
-        stage.setTitle(stageTitle);
-        stage.showAndWait();
-
+        // Check here if the button Delete was not triggered
+        if (event.getSource() != tbrBtnDelete) {
+            // FIXME: Need to fix the centering the modal after the parent element was minimize
+            // Create a new scene with root and set the stage
+            Parent root = (Parent) loader.load();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/resources/css/global.css").toExternalForm());
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL); // Restrict duplicate window to be shown
+            stage.initOwner(tbrBtnAdd.getScene().getWindow()); // Need to get the tbrBtnAdd parent window to be set as owner
+            stage.setTitle(stageTitle);
+            stage.showAndWait();
+        }
     }
 
     /**
      * Event handler for tab selection.
      *
-     * @param e
+     * @param event handler for selecting tabs
      */
     @FXML
-    public void onTabSelect(Event e) {
-        Tab tab = (Tab) e.getSource();
+    private void onTabSelect(Event event) {
+        Tab tab = (Tab) event.getSource();
         // Check if the tab was selected and the label lblTblEntries is not null 
         // this will prevent the error in runtime
         if (tab.isSelected() && lblTblEntries != null) {
-            int entries = animeNum;
+            int entries = olAnime.size();
             if (tab.getId().equals("tabManga")) {
-                entries = mangaNum;
+                entries = olManga.size();
             }
 
             lblTblEntries.setText("Showing " + entries + " entries");
         }
     }
 
+    @FXML
+    private void handleClose(ActionEvent event) {
+        ((Stage) rootPane.getScene().getWindow()).close();
+    }
+
     /**
-     * Generate a table view for manga or anime
+     * Create a cell value factories for manga or anime
+     *
+     * @param listType the list type of manga or anime.
+     */
+    private void createCellValueFactories(String listType) {
+        TableColumn colMangaNimeId = colAniId;
+        TableColumn colTitle = colAniTitle;
+        TableColumn colEpiChapStart = colAniEpiStart;
+        TableColumn colEpiChapEnd = colAniEpiEnd;
+        TableColumn colTotalEpiChap = colAniEpiTotal;
+        TableColumn colAllWatchedRead = colAniAllWatched;
+        TableColumn colStartDate = colAniReleaseDate;
+        TableColumn colEndDate = colAniEndDate;
+        TableColumn colState = colAniState;
+        TableColumn colCreatedOn = colAniCreatedOn;
+
+        if (listType.equals("manga")) {
+            colMangaNimeId = colMangaId;
+            colTitle = colMangaTitle;
+            colEpiChapStart = colMangaChapStart;
+            colEpiChapEnd = colMangaChapEnd;
+            colTotalEpiChap = colMangaChapTotal;
+            colAllWatchedRead = colMangaAllRead;
+            colStartDate = colMangaPublishDate;
+            colEndDate = colMangaEndDate;
+            colState = colMangaState;
+            colMangaVolumes.setCellValueFactory(new PropertyValueFactory("volumes"));
+            colMangaAuthor.setCellValueFactory(new PropertyValueFactory("author"));
+            colCreatedOn = colMangaCreatedOn;
+        }
+
+        colMangaNimeId.setCellValueFactory(new PropertyValueFactory("mangaNimeId"));
+        colTitle.setCellValueFactory(new PropertyValueFactory("title"));
+        colEpiChapStart.setCellValueFactory(new PropertyValueFactory("epiChapStart"));
+        colEpiChapEnd.setCellValueFactory(new PropertyValueFactory("epiChapEnd"));
+        colTotalEpiChap.setCellValueFactory(new PropertyValueFactory("totalEpiChap"));
+        colAllWatchedRead.setCellValueFactory(new PropertyValueFactory("allWatchedRead"));
+        colStartDate.setCellValueFactory(new PropertyValueFactory("startDate"));
+        colEndDate.setCellValueFactory(new PropertyValueFactory("endDate"));
+        colState.setCellValueFactory(new PropertyValueFactory("state"));
+        colCreatedOn.setCellValueFactory(new PropertyValueFactory("createdOn"));
+
+    }
+
+    /**
+     * Create a table items for manga or anime
      *
      * @param listType the list type of manga or anime.
      * @return the number of rows
      */
-    public int createMangaNimeTbl(String listType) {
-        int numRows = 0;
+    private ObservableList<Object> createTableItems(String listType) {
+        ObservableList<Object> olMangaNime = null;
         try {
-            ObservableList<Object> olMangaNime = manganime.getAllMangaNime(listType);
-            numRows = olMangaNime.size();
-
+            olMangaNime = manganime.getAllMangaNime(listType);
             TableView tblViewList = tblViewAnime;
-            TableColumn colMangaNimeId = colAniId;
-            TableColumn colTitle = colAniTitle;
-            TableColumn colEpiChapStart = colAniEpiStart;
-            TableColumn colEpiChapEnd = colAniEpiEnd;
-            TableColumn colTotalEpiChap = colAniEpiTotal;
-            TableColumn colAllWatchedRead = colAniAllWatched;
-            TableColumn colStartDate = colAniReleaseDate;
-            TableColumn colEndDate = colAniEndDate;
-            TableColumn colState = colAniState;
-            TableColumn colCreatedOn = colAniCreatedOn;
-
             if (listType.equals("manga")) {
                 tblViewList = tblViewManga;
-                colMangaNimeId = colMangaId;
-                colTitle = colMangaTitle;
-                colEpiChapStart = colMangaChapStart;
-                colEpiChapEnd = colMangaChapEnd;
-                colTotalEpiChap = colMangaChapTotal;
-                colAllWatchedRead = colMangaAllRead;
-                colStartDate = colMangaPublishDate;
-                colEndDate = colMangaEndDate;
-                colState = colMangaState;
-                colMangaVolumes.setCellValueFactory(new PropertyValueFactory("volumes"));
-                colMangaAuthor.setCellValueFactory(new PropertyValueFactory("author"));
-                colCreatedOn = colMangaCreatedOn;
             }
 
             tblViewList.setItems(olMangaNime);
-            colMangaNimeId.setCellValueFactory(new PropertyValueFactory("mangaNimeId"));
-            colTitle.setCellValueFactory(new PropertyValueFactory("title"));
-            colEpiChapStart.setCellValueFactory(new PropertyValueFactory("epiChapStart"));
-            colEpiChapEnd.setCellValueFactory(new PropertyValueFactory("epiChapEnd"));
-            colTotalEpiChap.setCellValueFactory(new PropertyValueFactory("totalEpiChap"));
-            colAllWatchedRead.setCellValueFactory(new PropertyValueFactory("allWatchedRead"));
-            colStartDate.setCellValueFactory(new PropertyValueFactory("startDate"));
-            colEndDate.setCellValueFactory(new PropertyValueFactory("endDate"));
-            colState.setCellValueFactory(new PropertyValueFactory("state"));
-            colCreatedOn.setCellValueFactory(new PropertyValueFactory("createdOn"));
-
         } catch (SQLException ex) {
             Logger.getLogger(MangaNimeListMainController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return numRows;
+
+        return olMangaNime;
     }
 }
