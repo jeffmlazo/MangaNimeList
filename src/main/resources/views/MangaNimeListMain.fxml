@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.Integer?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane fx:id="rootPane" prefHeight="600.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projexdev.manganimelist.controllers.MangaNimeListMainController">
+    <children>
+        <StackPane AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <children>
+                <HBox fx:id="hbRow1">
+                    <children>
+                        <MenuBar prefHeight="25.0" prefWidth="466.0" HBox.hgrow="ALWAYS">
+                            <menus>
+                                <Menu mnemonicParsing="false" text="File">
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" onAction="#handleClose" text="Close" />
+                                    </items>
+                                </Menu>
+                                <Menu mnemonicParsing="false" text="Update">
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" text="Delete" />
+                                    </items>
+                                </Menu>
+                                <Menu mnemonicParsing="false" text="New">
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" text="Anime" />
+                                        <MenuItem mnemonicParsing="false" text="Manga" />
+                                    </items>
+                                </Menu>
+                                <Menu mnemonicParsing="false" text="Help">
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" text="About" />
+                                    </items>
+                                </Menu>
+                            </menus>
+                        </MenuBar>
+                        <TextField fx:id="tfSearch" focusTraversable="false" prefHeight="25.0" prefWidth="212.0" promptText="Enter Title" />
+                        <ComboBox prefWidth="150.0">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="Anime" />
+                                    <String fx:value="Manga" />
+                                </FXCollections>
+                            </items>
+                            <!--Default value for the list type search-->
+                            <value>
+                                <String fx:value="Anime" />
+                            </value>
+                        </ComboBox>
+                    </children>
+                </HBox>
+            </children>
+        </StackPane>
+        <StackPane layoutY="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <children>
+                <ToolBar>
+                    <items>
+                        <Button fx:id="tbrBtnAdd" mnemonicParsing="false" onAction="#handleButtonAction" text="Add" />
+                        <Button fx:id="tbrBtnView" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleButtonAction" text="View" />
+                        <Button fx:id="tbrBtnUpdate" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Update" />
+                        <Button fx:id="tbrBtnDelete" layoutX="56.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Delete" />
+                    </items>
+                </ToolBar>
+            </children>
+        </StackPane>
+        <VBox layoutY="60.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+            <children>
+                <GridPane prefHeight="691.0" prefWidth="780.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="306.0" minHeight="10.0" prefHeight="27.0" valignment="BOTTOM" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="628.0" minHeight="10.0" prefHeight="626.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="306.0" minHeight="10.0" prefHeight="32.0" valignment="BOTTOM" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <HBox alignment="CENTER_LEFT">
+                            <children>
+                                <Label alignment="TOP_LEFT" text="Show" />
+                                <ComboBox prefHeight="25.0" prefWidth="59.0">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <Integer fx:value="10" />
+                                            <Integer fx:value="20" />
+                                        </FXCollections>
+                                    </items>
+                                    <value>
+                                        <Integer fx:value="10" />
+                                    </value>
+                                    <HBox.margin>
+                                        <Insets left="10.0" right="10.0" />
+                                    </HBox.margin>
+                                </ComboBox>
+                                <Label alignment="TOP_LEFT" text="entries" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1">
+                            <children>
+                                <TextField promptText="Search" />
+                            </children>
+                        </HBox>
+                        <TabPane tabClosingPolicy="UNAVAILABLE" GridPane.columnSpan="2" GridPane.rowIndex="1">
+                            <tabs>
+                                <Tab fx:id="tabAnime" closable="false" onSelectionChanged="#onTabSelect" text="Anime">
+                                    <content>
+                                        <TableView fx:id="tblViewAnime">
+                                            <columns>
+                                                <TableColumn fx:id="colAniId" minWidth="100.0" prefWidth="100.0" text="Id" visible="false" />
+                                                <TableColumn fx:id="colAniTitle" minWidth="100.0" prefWidth="100.0" text="Title" />
+                                                <TableColumn fx:id="colAniEpisodes" prefWidth="75.0" text="Episodes">
+                                                    <columns>
+                                                        <TableColumn fx:id="colAniEpiStart" maxWidth="70.0" minWidth="70.0" prefWidth="70.0" text="Start" />
+                                                        <TableColumn fx:id="colAniEpiEnd" maxWidth="70.0" minWidth="70.0" prefWidth="70.0" text="End" />
+                                                        <TableColumn fx:id="colAniEpiTotal" maxWidth="80.0" minWidth="80.0" text="Total" />
+                                                    </columns>
+                                                </TableColumn>
+                                                <TableColumn fx:id="colAniAllWatched" maxWidth="2500.0">
+                                                    <!--Add here a graphic tag and inside of it add a label to force the text to wrap with center alignment-->
+                                                    <graphic>
+                                                        <Label styleClass="center-wrap-text" text="All Watched" />
+                                                    </graphic>
+                                                </TableColumn>
+                                                <TableColumn fx:id="colAniReleaseDate" text="Release Date" />
+                                                <TableColumn fx:id="colAniEndDate" prefWidth="70.0" text="End Date" />
+                                                <TableColumn fx:id="colAniState" prefWidth="75.0" text="State" />
+                                                <TableColumn fx:id="colAniCreatedOn" prefWidth="75.0" sortType="DESCENDING" text="Created On" />
+                                            </columns>
+                                            <columnResizePolicy>
+                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                            </columnResizePolicy>
+                                        </TableView>
+                                    </content>
+                                </Tab>
+                                <Tab fx:id="tabManga" closable="false" onSelectionChanged="#onTabSelect" text="Manga">
+                                    <content>
+                                        <TableView fx:id="tblViewManga" prefHeight="573.0" prefWidth="800.0">
+                                            <columns>
+                                                <TableColumn fx:id="colMangaId" minWidth="100.0" prefWidth="100.0" text="Id" visible="false" />
+                                                <TableColumn fx:id="colMangaTitle" minWidth="100.0" prefWidth="100.0" text="Title" />
+                                                <TableColumn fx:id="colMangChapters" prefWidth="75.0" text="Chapters">
+                                                    <columns>
+                                                        <TableColumn fx:id="colMangaChapStart" maxWidth="70.0" minWidth="70.0" prefWidth="70.0" text="Start" />
+                                                        <TableColumn fx:id="colMangaChapEnd" maxWidth="70.0" minWidth="70.0" prefWidth="70.0" text="End" />
+                                                        <TableColumn fx:id="colMangaChapTotal" maxWidth="80.0" minWidth="80.0" text="Total" />
+                                                    </columns>
+                                                </TableColumn>
+                                                <TableColumn fx:id="colMangaVolumes" prefWidth="75.0" text="Volumes" />
+                                                <TableColumn fx:id="colMangaAllRead" prefWidth="75.0" text="All Read" />
+                                                <TableColumn fx:id="colMangaPublishDate" text="Publish Date" />
+                                                <TableColumn fx:id="colMangaEndDate" prefWidth="70.0" text="End Date" />
+                                                <TableColumn fx:id="colMangaAuthor" prefWidth="70.0" text="Author" />
+                                                <TableColumn fx:id="colMangaState" prefWidth="70.0" text="State" />
+                                                <TableColumn fx:id="colMangaCreatedOn" prefWidth="75.0" sortType="DESCENDING" text="Created On" />
+                                            </columns>
+                                            <columnResizePolicy>
+                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                            </columnResizePolicy>
+                                        </TableView>
+                                    </content>
+                                </Tab>
+                            </tabs>
+                        </TabPane>
+                        <HBox alignment="CENTER_LEFT" GridPane.rowIndex="2">
+                            <children>
+                                <Label fx:id="lblTblEntries" alignment="TOP_LEFT" text="Showing 0 entries" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" spacing="5.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                            <children>
+                                <Button mnemonicParsing="false" text="Previous" />
+                                <Button mnemonicParsing="false" text="Next" />
+                            </children>
+                        </HBox>
+                    </children>
+                </GridPane>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
