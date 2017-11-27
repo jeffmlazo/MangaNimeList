@@ -160,9 +160,9 @@ public class GenreModel {
      * @return all genre details
      * @throws SQLException
      */
-    public ObservableList getAllGenre() throws SQLException {
+    public ObservableList<Object> getAllGenre() throws SQLException {
 
-        ObservableList data = FXCollections.observableArrayList();
+        ObservableList<Object> data = FXCollections.observableArrayList();
         String query = "SELECT * FROM genre";
         // preparedStmt is already autocloseable so no need to add in the finally block
         try {

@@ -35,6 +35,8 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import static java.lang.Integer.parseInt;
 import com.projexdev.manganimelist.configs.DbHandler;
+import com.projexdev.manganimelist.libraries.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.function.Consumer;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
@@ -52,6 +54,9 @@ public class AddController implements Initializable {
     private GenreModel genre = new GenreModel();
     private final MangaNimeModel manganime = new MangaNimeModel();
     private final DbHandler setUpTable = new DbHandler();
+    private TableView table;
+//    private Consumer<ObservableList> callback;
+    private StringProperty listTypeProp = new SimpleStringProperty();
 
     @FXML
     private GridPane gridPaneForm;
@@ -96,29 +101,12 @@ public class AddController implements Initializable {
     @FXML
     private Button btnClose;
 
-    private Consumer<ObservableList> callback;
-    private StringProperty listTypeProp = new SimpleStringProperty();
-
-    /**
-     * Set the list type of manga or anime.
-     *
-     * @param listType the type of list manga or anime
-     */
-    public void setListType(String listType) {
-        listTypeProp.setValue(listType);
-    }
-
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-
-            // Setup table with column and values for genre
-            setUpTable.setUpGenre();
-            setUpTable.insertGenreValues();
-
             // Initialize for the column and row index in the gridpane
             int colIndex = 0;
             int rowIndex = 0;
@@ -167,7 +155,6 @@ public class AddController implements Initializable {
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException, SQLException {
 
-        // Failed value state, allWatchedRead, 
         if (event.getSource() == btnAdd) {
             String listType = listTypeProp.getValue();
             String title = tfTitle.getText().trim();
@@ -235,11 +222,10 @@ public class AddController implements Initializable {
 
             // Check if no errors has been return means that all form fields have pass
             if (errors.isEmpty()) {
-                // Check if the value was yes or no then reassign the new value to 1 or 0 
+                // Check if the value was yes or no then reassign the new value to 1 or 0
+                String newAllWatchedRead = "0";
                 if (allWatchedRead.equals("yes")) {
-                    allWatchedRead = "1";
-                } else {
-                    allWatchedRead = "0";
+                    newAllWatchedRead = "1";
                 }
 
                 manganime.titleProp().setValue(title);
@@ -247,7 +233,7 @@ public class AddController implements Initializable {
                 manganime.epiChapStartProp().setValue(parseInt(epiChapStart));
                 manganime.epiChapEndProp().setValue(parseInt(epiChapEnd));
                 manganime.totalEpiChapProp().setValue(parseInt(totalEpiChap));
-                manganime.allWatchedReadProp().setValue(allWatchedRead.toString());
+                manganime.allWatchedReadProp().setValue(newAllWatchedRead.toString());
                 manganime.startDateProp().setValue(startDate.toString());
                 manganime.endDateProp().setValue(endDate.toString());
                 manganime.stateProp().setValue(state.toString());
@@ -292,20 +278,23 @@ public class AddController implements Initializable {
                     success.add(msgTitle + " was successfully added!");
                     MsgBox.showModal(success, "success");
 
-                    // FIXME: This code didn't work using cosumer function rowData needs to be casted
-//                    ObservableList<Object> rowData = FXCollections.observableArrayList();
-//                    rowData.add(manganime.mangaNimeIdProp().getValue());
-//                    rowData.add(manganime.titleProp().getValue());
-//                    rowData.add(manganime.epiChapStartProp().getValue());
-//                    rowData.add(manganime.epiChapEndProp().getValue());
-//                    rowData.add(manganime.totalEpiChapProp().getValue());
-//                    rowData.add(manganime.allWatchedReadProp().getValue());
-//                    rowData.add(manganime.startDateProp().getValue());
-//                    rowData.add(manganime.endDateProp().getValue());
-//                    rowData.add(manganime.stateProp().getValue());
-//                    rowData.add(manganime.createdOnProp().getValue());
-//
-//                    setNewRowConsumer((Consumer<ObservableList>) rowData);
+                    // TODO: Need to implement the alternative code for refresing the table using the callback consumer
+                    MangaNimeModel mangaNimeData = new MangaNimeModel();
+                    mangaNimeData.mangaNimeIdProp().setValue(manganime.mangaNimeIdProp().getValue());
+                    mangaNimeData.titleProp().setValue(title);
+                    mangaNimeData.epiChapStartProp().setValue(parseInt(epiChapStart));
+                    mangaNimeData.epiChapEndProp().setValue(parseInt(epiChapEnd));
+                    mangaNimeData.totalEpiChapProp().setValue(parseInt(totalEpiChap));
+                    mangaNimeData.allWatchedReadProp().setValue(allWatchedRead.toString());
+                    mangaNimeData.startDateProp().setValue(DateTimeFormatter.formatDate(startDate.toString()));
+                    mangaNimeData.endDateProp().setValue(DateTimeFormatter.formatDate(endDate.toString()));
+                    mangaNimeData.stateProp().setValue(state.toString());
+                    // Get the current date & time
+                    Calendar cal = Calendar.getInstance();
+                    long currentDateTime = cal.getTimeInMillis();
+                    mangaNimeData.createdOnProp().setValue(DateTimeFormatter.formatDateTime(currentDateTime)); // Date is missing need to get the data from logs or just create a localdate here
+                    table.getItems().add(mangaNimeData);
+                    table.sort(); // FIXME: Sorting didn't work
                 }
             } else {
                 MsgBox.showModal(errors, "error");
@@ -321,33 +310,26 @@ public class AddController implements Initializable {
             // Get the scene using the button close to close the window
 //            btnClose.getScene().getWindow().hide();
 
-            FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/views/MangaNimeListMain.fxml"));
-            mainLoader.load();
-            
-            MangaNimeListMainController MangaNimeMainCtrl = mainLoader.getController();
-            MangaNimeMainCtrl.addNewRow();
-
-            // TODO: Find a way to get the parents elelement
-//            Stage st = (Stage) btnClose.getScene().getWindow();
-            //            Window owner = st.getOwner();
-            //            Node n = owner.getScene().getRoot();
-            //            System.out.println(n);
-            //            System.out.println(owner.toString());
-            //            ObservableList<Stage> stages = StageHelper.getStages();
-            //            Stage fS = stages.get(0);
-            //            System.out.println(fS.getTitle());
-            //
-            //            ObservableList<Stage> stages2 = FXRobotHelper.getStages();
-            //            Stage fs2 = stages2.get(0);
-            //            System.out.println(fs2.titleProperty().getValue());
+            MangaNimeModel mangaNimeData = new MangaNimeModel();
+            mangaNimeData.setMangaNimeId("089as0d808sd0a8s");
+            mangaNimeData.setTitle("Dummy Title");
+            mangaNimeData.setEpiChapStart(2);
+            mangaNimeData.setEpiChapEnd(122);
+            mangaNimeData.setTotalEpiChap(100);
+            mangaNimeData.setAllWatchedRead("yes");
+            mangaNimeData.setStartDate("12/01/2013");
+            mangaNimeData.setEndDate("12/23/2014");
+            mangaNimeData.setState("completed");
+            mangaNimeData.setCreatedOn("12/22/2017 12:00 AM");
+            table.getItems().add(mangaNimeData);
+            table.sort();
         }
     }
 
-    public void setNewRowConsumer(Consumer<ObservableList> callback) {
-        this.callback = callback;
-    }
-
-    public ObservableList setNewRow() {
+//    public void setNewRowConsumer(Consumer<ObservableList> callback) {
+//        this.callback = callback;
+//    }
+    public ObservableList<Object> setNewRow() {
         ObservableList<Object> rowData = FXCollections.observableArrayList();
         rowData.add(manganime.getMangaNimeId());
         rowData.add(manganime.getTitle());
@@ -361,5 +343,23 @@ public class AddController implements Initializable {
         rowData.add(manganime.getCreatedOn());
 
         return rowData;
+    }
+
+    /**
+     * Set the table from the MangaNimeListMainController.
+     *
+     * @param table the table from the parent controller
+     */
+    public void setTable(TableView table) {
+        this.table = table;
+    }
+
+    /**
+     * Set the list type of manga or anime.
+     *
+     * @param listType the type of list manga or anime
+     */
+    public void setListType(String listType) {
+        listTypeProp.setValue(listType);
     }
 }

@@ -83,6 +83,14 @@ public class MangaNimeListMainController implements Initializable {
             setUpTable.setUpGenres();
             setUpTable.setUpImages();
             setUpTable.setUpLog();
+            setUpTable.setUpGenre();
+
+            try {
+                // Insert default values for genre
+                setUpTable.insertGenreValues();
+            } catch (SQLException ex) {
+                Logger.getLogger(MangaNimeListMainController.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
             // Set create cell value factories for anime & manga
             createCellValueFactories("anime");
@@ -132,9 +140,14 @@ public class MangaNimeListMainController implements Initializable {
                 loader.setLocation(getClass().getResource("/views/manga/AddMangaModal.fxml"));
             }
 
-            AddController AddCtrl = new AddController();
-            AddCtrl.setListType(listType);
-            loader.setController(AddCtrl);
+            AddController addCtrl = new AddController();
+            // Set a listype in manga
+            addCtrl.setListType(listType);
+            // Pass the tableview to the add anime and manga
+            addCtrl.setTable(tblViewAnime);
+
+            // Set the controller for add stage for anime and manga
+            loader.setController(addCtrl);
 
         } else if (event.getSource() == tbrBtnView) {
             // Check if what tab is actively selected
@@ -189,8 +202,7 @@ public class MangaNimeListMainController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL); // Restrict duplicate window to be shown
             stage.initOwner(tbrBtnAdd.getScene().getWindow()); // Need to get the tbrBtnAdd parent window to be set as owner
             stage.setTitle(stageTitle);
-//            stage.showAndWait();
-            stage.show();
+            stage.showAndWait();
         }
     }
 
@@ -285,27 +297,5 @@ public class MangaNimeListMainController implements Initializable {
         }
 
         return olMangaNime;
-    }
-
-    /*
-    This code can call from the AddController but the olAnime clear & add  isn't working.
-     */
-    public void addNewRow() {
-        olAnime.clear();
-        MangaNimeModel mangaNimeData = new MangaNimeModel();
-        mangaNimeData.setMangaNimeId("089as0d808sd0a8s");
-        mangaNimeData.setTitle("Dummy Title");
-        mangaNimeData.setEpiChapStart(2);
-        mangaNimeData.setEpiChapEnd(122);
-        mangaNimeData.setTotalEpiChap(100);
-        mangaNimeData.setAllWatchedRead("yes");
-        mangaNimeData.setStartDate("12/01/2013");
-        mangaNimeData.setEndDate("12/23/2014");
-        mangaNimeData.setState("completed");
-        mangaNimeData.setCreatedOn("12/22/2017 12:00 AM");
-        olAnime.add(mangaNimeData);
-
-//        lblTblEntries.setText("Showing " + olAnime.size() + " entriestest");
-//        tblViewAnime.sort(); // Sort again the table after adding new data
     }
 }

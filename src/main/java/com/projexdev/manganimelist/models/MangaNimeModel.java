@@ -636,7 +636,7 @@ public class MangaNimeModel {
      */
     public ObservableList<Object> getAllMangaNime(String listType) throws SQLException {
 
-        ObservableList data = FXCollections.observableArrayList();
+        ObservableList<Object> data = FXCollections.observableArrayList();
         String query = "SELECT manganime.*, log.created_on "
                 + "FROM manganime "
                 + "LEFT JOIN log "
